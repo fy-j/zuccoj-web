@@ -1,32 +1,76 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <page-nav></page-nav>
+    <div id="mainBox" ref="pageBox">
+        <router-view/>
     </div>
-    <router-view/>
+    <page-foot></page-foot>
   </div>
 </template>
 
+<script>
+  import PageNav from '@/components/page-item/page-nav'
+  import PageFoot from '@/components/page-item/page-foot'
+  export default {
+    components: {
+      'page-nav': PageNav,
+      'page-foot': PageFoot
+    },
+    data() {
+      return {
+        clientHeight: window.innerHeight,
+        clientWidth: window.innerWidth
+      }
+    },
+    methods: {
+      fixPageSize() {
+        this.clientHeight = window.innerHeight
+        this.clientWidth = window.innerWidth
+        this.$refs.pageBox.style.minHeight = this.clientHeight - 48 + 'px'
+      }
+    },
+    mounted() {
+      this.fixPageSize()
+      const that = this
+      window.onresize = () => {
+        return (() => {
+          that.fixPageSize()
+        })()
+      }
+    }
+  }
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+    * {
+      padding: 0;
+      margin: 0;
+      border: 0;
+      text-decoration: none;
+      list-style-type: none;
+    }
 
-#nav {
-  padding: 30px;
-}
+    #app {
+      font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+      overflow: hidden;
+      width: 100%;
+      min-width: 1100px;
+      background: rgb(237,240,242);
+    }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+    #mainBox{
+      width: 1100px;
+      position: relative;
+      left: 50%;
+      transform: translate(-50%, 0);
+      margin: 20px 0;
+    }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+    .ant-menu-horizontal {
+      border-bottom: 0;
+    }
+
+    .ant-card-body{
+      padding: 0;
+    }
 </style>
