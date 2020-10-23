@@ -2,13 +2,16 @@
   <base-box-frame>
     <template v-slot:content>
       <div style="margin-top: 10px">
-        <div class="contest-right-button">
+        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/problems')}">
+          <a-icon type="unordered-list" /> <span style="margin-left: 10px">题目列表</span>
+        </div>
+        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/standings')}">
           <a-icon type="area-chart" /> <span style="margin-left: 10px">比赛榜单</span>
         </div>
-        <div class="contest-right-button">
+        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/my')}">
           <a-icon type="upload" /> <span style="margin-left: 10px">我的提交</span>
         </div>
-        <div class="contest-right-button">
+        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/status')}">
           <a-icon type="code" /> <span style="margin-left: 10px">评测记录</span>
         </div>
       </div>
@@ -61,7 +64,7 @@ export default {
   },
   props: {
     contestInfo: Object
-  }
+  },
 }
 </script>
 

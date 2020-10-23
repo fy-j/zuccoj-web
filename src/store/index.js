@@ -11,12 +11,15 @@ export default new Vuex.Store({
       if (x<10) return '0'+x
       return ''+x
     },
-    dateFormat: function (date) {
+    dateFormat: function (date, second) {
       let res = date.getFullYear() + '-'
       res += this.fixZero(date.getMonth()+1) + '-'
       res += this.fixZero(date.getDate()) + ' '
       res += this.fixZero(date.getHours()) + ':'
       res += this.fixZero(date.getMinutes())
+      if (second) {
+        res += ':' + this.fixZero(date.getSeconds())
+      }
       return res
     }
   },

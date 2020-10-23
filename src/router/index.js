@@ -31,12 +31,26 @@ const routes = [
     children: [{
       path: 'problems',
       component: () => import('@/views/contest/Problems')
-    }]
+    },{
+      path: 'status',
+      component: () => import('@/views/Status')
+    },{
+      path: 'my',
+      component: () => import('@/components/contest/contest-my-submit')
+    },{
+      path: 'standings',
+      component: () => import('@/components/contest/contest-standings')
+    },]
   },
   {
     path: '/gym',
     name: 'gym',
     component: () => import('@/views/Gym')
+  },
+  {
+    path: '/status',
+    name: 'status',
+    component: () => import('@/views/Status')
   },
   {
     path: '/error/:code',
