@@ -64,17 +64,10 @@
       justify-content: space-between;
     }
 
-    .build-version {
-        font-size: 12px;
-        color: rgba(144, 147, 153, 0.98);
-        display: block;
-        margin-top: 15px;
-    }
-
     .foot-content-box{
       display: inline-block;
       vertical-align: top;
-      min-width: 300px;
+      min-width: 200px;
     }
 
     .foot-title{

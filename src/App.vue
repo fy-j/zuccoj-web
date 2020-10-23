@@ -26,7 +26,7 @@
       fixPageSize() {
         this.clientHeight = window.innerHeight
         this.clientWidth = window.innerWidth
-        this.$refs.pageBox.style.minHeight = this.clientHeight - 48 + 'px'
+        this.$refs.pageBox.style.minHeight = this.clientHeight - 48 - 233 - 30 + 'px'
       }
     },
     mounted() {
@@ -73,4 +73,18 @@
     .ant-card-body{
       padding: 0;
     }
+
+    .table-error-row {
+      background: linear-gradient(to right, rgb(253,226,226) 0%, white 15%);
+    }
+    .table-right-row {
+      background: linear-gradient(to right, rgb(225,243,216) 0%, white 15%);
+    }
+    .table-pagination-box {
+      margin: 20px 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
 </style>

@@ -25,10 +25,28 @@ const routes = [
     component: () => import('@/views/Contests')
   },
   {
+    path: '/contest/:contestId',
+    name: 'contest',
+    component: () => import('@/views/contest/Contest'),
+    children: [{
+      path: 'problems',
+      component: () => import('@/views/contest/Problems')
+    }]
+  },
+  {
     path: '/gym',
     name: 'gym',
     component: () => import('@/views/Gym')
   },
+  {
+    path: '/error/:code',
+    name: 'error',
+    component: () => import('@/views/error/Error')
+  },
+  {
+    path: '*',
+    redirect: '/error/404'
+  }
 ]
 
 const router = new VueRouter({
