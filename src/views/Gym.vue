@@ -21,7 +21,7 @@
           <a-icon v-else type="close" style="color: red"/>
         </span>
         <span slot="memberNum" slot-scope="memberNum, gym">
-          <a :href="'#/gym/'+gym.gymId+'/standing'"><a-icon type="user"/> {{memberNum}}</a>
+          <a :href="'#/gym/'+gym.gymId+'/standings'"><a-icon type="user"/> {{memberNum}}</a>
         </span>
       </a-table>
       <div class="table-pagination-box">

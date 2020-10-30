@@ -18,7 +18,7 @@
       <a-divider />
       <div style="padding: 0 30px">
         <a-progress :percent="((new Date())-contestInfo.beginTime)/(contestInfo.endTime-contestInfo.beginTime)*100" status="active" :strokeWidth="30" :showInfo="false"/>
-        <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime"></a-statistic-countdown>
+        <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime.valueOf()"></a-statistic-countdown>
       </div>
       <a-divider />
       <div style="margin-bottom: 24px">

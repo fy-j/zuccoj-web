@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="contest-title">
-      {{contestInfo.contestName}}
+      {{contestInfo.contestName}} <span style="cursor: pointer" @click="()=>{rightBoxShow=!rightBoxShow}"><a-icon :type="rightBoxShow?'arrows-alt':'shrink'" /></span>
     </div>
     <a-row :gutter="16">
-      <a-col class="gutter-row" :span="18">
+      <a-col class="gutter-row" :span="rightBoxShow?18:24">
         <router-view />
       </a-col>
-      <a-col class="gutter-row" :span="6">
+      <a-col class="gutter-row" :span="6" v-if="rightBoxShow">
         <contest-right-box :contest-info="contestInfo"></contest-right-box>
       </a-col>
     </a-row>
@@ -32,7 +32,8 @@ export default {
         rule: 'ACM/ICPC',
         memberNum: 151,
         status: 0,
-      }
+      },
+      rightBoxShow: true
     }
   },
   created() {

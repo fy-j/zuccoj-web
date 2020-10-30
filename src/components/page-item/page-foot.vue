@@ -17,7 +17,7 @@
 
         <div class="foot-content-box">
           <b class="foot-title">关于</b>
-          <span class="foot-item" :title="'build '+buildVersion">ZUCC Online Judge &alpha;</span>
+          <span class="foot-item" :title="'build '+buildVersion">ZUCC Online Judge &beta;</span>
           <span class="foot-item">&copy; {{ new Date().getFullYear() }} ZUCC ACM LAB</span>
           <span class="foot-item">Powered by <a>@KeadinZhou</a></span>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <base-box-frame>
     <template v-slot:content>
-      <a-table :columns="columns" :data-source="standingsData" size="middle" :pagination="false" bordered :scroll="{x:((problems.length<=7)?(false):(320+65*problems.length))}">
+      <a-table :columns="columns" :data-source="standingsData" size="middle" bordered :scroll="{x:((problems.length<=7)?(false):(320+65*problems.length))}" :pagination="{pageSize: 15}">
         <span slot="userRank" slot-scope="userRank">
           <b>{{userRank}}</b>
         </span>
@@ -12,7 +12,6 @@
             :problem="problemName"
             :record="record"
             :key="problemName+Math.random()">
-
         </contest-standings-each>
       </a-table>
     </template>
@@ -142,6 +141,223 @@ const standingsData = [
     },
     firstBlood: {
       D: true
+    }
+  },
+  {
+    key: '31801313',
+    username: '31801313',
+    nickname: '安俊梦',
+    userRank: 4,
+    userScore: 6,
+    userPenalty: 604,
+    wrongTry: {
+      A: 1,
+      G: 5,
+      H: 3,
+      L: 5
+    },
+    rightTime: {
+      A: 5,
+      B: 7,
+      C: 18,
+      F: 117,
+      H: 167,
+      L: 110
+    },
+    firstBlood: {
+      C: true,
+      H: true
+    }
+  },
+  {
+    key: '31801350',
+    username: '31801350',
+    nickname: '吕博图',
+    userRank: 5,
+    userScore: 6,
+    userPenalty: 634,
+    wrongTry: {
+      A: 1,
+      B: 1,
+      C: 2,
+      D: 1,
+      F: 2,
+      L: 2
+    },
+    rightTime: {
+      A: 4,
+      B: 9,
+      C: 58,
+      F: 125,
+      H: 193,
+      L: 85
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801088',
+    username: '31801088',
+    nickname: '测试一',
+    userRank: 6,
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801089',
+    username: '31801089',
+    nickname: '测试二',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801090',
+    username: '31801090',
+    nickname: '测试三',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801091',
+    username: '31801091',
+    nickname: '测试四',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801092',
+    username: '31801092',
+    nickname: '测试五',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801093',
+    username: '31801093',
+    nickname: '测试六',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801094',
+    username: '31801094',
+    nickname: '测试六',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801095',
+    username: '31801095',
+    nickname: '测试七',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801096',
+    username: '31801096',
+    nickname: '测试八',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801097',
+    username: '31801097',
+    nickname: '测试九',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
+    }
+  },
+  {
+    key: '31801098',
+    username: '31801098',
+    nickname: '测试十',
+    userRank: '',
+    userScore: 1,
+    userPenalty: 1,
+    wrongTry: {
+    },
+    rightTime: {
+      A: 1
+    },
+    firstBlood: {
     }
   },
 ]
