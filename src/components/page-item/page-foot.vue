@@ -10,7 +10,7 @@
 
         <div class="foot-content-box">
           <b class="foot-title">管理</b>
-          <a class="foot-item">系统状态</a>
+          <a class="foot-item" href="#/system">系统状态</a>
           <a class="foot-item">数据管理</a>
           <a class="foot-item">管理后台</a>
         </div>

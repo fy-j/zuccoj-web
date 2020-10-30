@@ -15,6 +15,18 @@ const routes = [
     component: () => import('@/views/Problems')
   },
   {
+    path: '/problem/:problemId',
+    name: 'problem',
+    component: () => import('@/views/problem/Problem'),
+    children: [{
+      path: '',
+      redirect: 'description'
+    },{
+      path: 'description',
+      component: () => import('@/views/problem/Description')
+    }]
+  },
+  {
     path: '/rank',
     name: 'rank',
     component: () => import('@/views/Rank')
@@ -51,6 +63,11 @@ const routes = [
     path: '/status',
     name: 'status',
     component: () => import('@/views/Status')
+  },
+  {
+    path: '/system',
+    name: 'system',
+    component: () => import('@/views/System')
   },
   {
     path: '/error/:code',

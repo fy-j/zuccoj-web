@@ -1,19 +1,19 @@
 <template>
-  <base-box-frame>
+  <title-box-frame title="最近提交数据/ data">
     <template v-slot:content>
       <div style="width: 98%">
         <ve-line :data="chartData" :settings="chartSettings" :legend-visible="false" :extend="extend"></ve-line>
       </div>
     </template>
-  </base-box-frame>
+  </title-box-frame>
 </template>
 
 <script>
-import BaseBoxFrame from '@/components/frame/base-box-frame'
+import TitleBoxFrame from '@/components/frame/title-box-frame'
 export default {
-  name: "index-recent-data-chart",
+  name: "recent-data-chart",
   components: {
-    'base-box-frame': BaseBoxFrame
+    'title-box-frame': TitleBoxFrame
   },
   data() {
     return {
