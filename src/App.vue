@@ -86,5 +86,8 @@
       display: flex;
       justify-content: center;
     }
-
+    .CodeMirror{
+       height: auto;
+       min-height: 500px;
+     }
 </style>

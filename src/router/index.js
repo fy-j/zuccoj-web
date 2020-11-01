@@ -24,6 +24,9 @@ const routes = [
     },{
       path: 'description',
       component: () => import('@/views/problem/Description')
+    },{
+      path: 'submit',
+      component: () => import('@/views/problem/Submit')
     }]
   },
   {

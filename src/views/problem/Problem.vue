@@ -5,7 +5,7 @@
         <router-view />
       </a-col>
       <a-col class="gutter-row" :span="6">
-        <problem-right-box></problem-right-box>
+        <problem-right-box :problem-info="problemInfo"></problem-right-box>
       </a-col>
     </a-row>
   </div>
@@ -17,6 +17,17 @@ export default {
   name: "Problem",
   components: {
     'problem-right-box': Problem
+  },
+  data () {
+    return {
+      problemInfo: {
+        problemId: '1000',
+        timeLimit: 1000,
+        memoryLimit: 64,
+        submitted: 2202,
+        solved: 1579
+      }
+    }
   }
 }
 </script>

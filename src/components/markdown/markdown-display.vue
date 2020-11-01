@@ -1,5 +1,14 @@
 <template>
-  <mavon-editor v-model="content" :editable="false" :subfield="false" :toolbarsFlag="false" previewBackground="#FFFFFF" :boxShadow="false" class="markdown-only-show" defaultOpen="preview"/>
+  <mavon-editor
+      v-model="content"
+      :editable="false"
+      :subfield="false"
+      :toolbarsFlag="false"
+      previewBackground="#FFFFFF"
+      :boxShadow="false"
+      class="markdown-only-show"
+      :transition="false"
+      defaultOpen="preview"/>
 </template>
 
 <script>
