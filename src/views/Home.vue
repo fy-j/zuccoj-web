@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-dropdown :trigger="['contextmenu']">
-      <img src="/index.png" alt="" width="100%">
+      <img src="@/assets/index.png" alt="" width="100%">
       <a-menu slot="overlay">
         <a-menu-item key="1">
           1st menu item

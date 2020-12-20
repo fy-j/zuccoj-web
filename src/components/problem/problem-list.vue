@@ -5,8 +5,8 @@
         <span slot="problemId" slot-scope="problemId">
           <b>{{problemId}}</b>
         </span>
-        <a :href="'/#/contest/'+contestInfo.contestId+'/problem/'+record.problemId" slot="problemTitle" slot-scope="problemTitle, record" v-if="contestInfo">{{problemTitle}}</a>
-        <a :href="'/#/problem/'+record.problemId" slot="problemTitle" slot-scope="problemTitle, record" v-else>{{problemTitle}}</a>
+        <a :href="'#/contest/'+contestInfo.contestId+'/problem/'+record.problemId" slot="problemTitle" slot-scope="problemTitle, record" v-if="contestInfo">{{problemTitle}}</a>
+        <a :href="'#/problem/'+record.problemId" slot="problemTitle" slot-scope="problemTitle, record" v-else>{{problemTitle}}</a>
         <template slot="statusIcon" slot-scope="statusIcon">
           <a-icon v-if="statusIcon === 1"  type="check" style="color: green"/>
           <a-icon v-else-if="statusIcon === -1" type="close" style="color: red"/>

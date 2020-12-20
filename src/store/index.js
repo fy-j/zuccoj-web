@@ -3,8 +3,13 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const host = 'http://localhost:8080'
+const file_host = 'http://localhost:8080'
+
 export default new Vuex.Store({
   state: {
+    host: host,
+    file_host: file_host,
     current_page: [],
     user: null,
     fixZero: function (x) {
@@ -30,6 +35,42 @@ export default new Vuex.Store({
     updateUserInfo(state, data) {
       state.user = data
     },
+    updateUser(state, showMsg) {
+      let that = this._vm
+      that.$http.get(state.host + '/user/get')
+        .then(data => {
+          if (data.data.code === 200) {
+            let Data = data.data.data
+            state.user = Data
+          } else {
+            if (showMsg) {
+              that.$message.error(data.data.msg)
+            }
+          }
+        })
+        .catch(() => {
+          that.$message.error('系统错误')
+        })
+        .finally(() => {
+        })
+    },
+    logout(state) {
+      let that = this._vm
+      that.$http.post(state.host + '/user/logout')
+        .then(data => {
+          if (data.data.code === 200) {
+            that.$message.success(data.data.msg)
+            state.user = null
+          } else {
+            that.$message.error(data.data.msg)
+          }
+        })
+        .catch(() => {
+          that.$message.error('系统错误')
+        })
+        .finally(() => {
+        })
+    }
   },
   actions: {
   },

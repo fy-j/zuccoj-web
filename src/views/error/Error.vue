@@ -29,7 +29,7 @@
 <script>
 import BaseBoxFrame from '@/components/frame/base-box-frame'
 export default {
-  name: "error404",
+  name: "error",
   components: {
     'base-box-frame': BaseBoxFrame
   },

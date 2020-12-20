@@ -80,7 +80,7 @@
       </a-input>
       <a-input v-model="reg.captcha" placeholder="Captcha *" size="large" class="nav-input">
         <a-icon slot="prefix" type="safety" />
-        <img slot="suffix" src="/CAPTCHA.jpg" alt="" width="100%">
+        <img slot="suffix" src="@/assets/CAPTCHA.jpg" alt="" width="100%">
       </a-input>
     </a-modal>
   </a-affix>
@@ -129,27 +129,36 @@
       loginSubmit() {
         let that = this
         that.loginSubmitting = true
-        setTimeout(()=>{
-          that.$message.success("欢迎你，" + that.login.username)
-          that.$store.commit('updateUserInfo', {
-            username: that.login.username,
-            nickname: that.login.username,
-            status: 0
-          })
-          that.login = {
-            username: '',
-            password: ''
+        let sendData = new FormData()
+        sendData.append('username', that.login.username)
+        sendData.append('password', that.login.password)
+        that.$http.post(that.$store.state.host + '/user/login', sendData)
+        .then(data => {
+          if (data.data.code === 200) {
+            let Data = data.data.data
+            that.$message.success("欢迎你，" + Data.nickname)
+            that.$store.commit('updateUserInfo', Data)
+            that.login = {
+              username: '',
+              password: ''
+            }
+          } else {
+            that.$message.error(data.data.msg)
           }
+        })
+        .catch(() => {
+          that.$message.error('系统错误')
+        })
+        .finally(() => {
           that.loginSubmitting = false
           that.loginModalVisible = false
+        })
+        setTimeout(()=>{
         }, 500)
       },
       logoutSubmit() {
         let that = this
-        setTimeout(()=>{
-          that.$message.success("退出成功")
-          that.$store.commit('updateUserInfo', null)
-        }, 500)
+        that.$store.commit('logout')
       },
       regCheck() {
         let that = this

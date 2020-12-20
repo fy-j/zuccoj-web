@@ -7,75 +7,80 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/Home')
+    component: () => import('../views/Home')
   },
   {
     path: '/problems',
     name: 'problems',
-    component: () => import('@/views/Problems')
+    component: () => import('../views/Problems')
   },
   {
     path: '/problem/:problemId',
     name: 'problem',
-    component: () => import('@/views/problem/Problem'),
+    component: () => import('../views/problem/Problem'),
     children: [{
       path: '',
       redirect: 'description'
     },{
       path: 'description',
-      component: () => import('@/views/problem/Description')
+      component: () => import('../views/problem/Description')
     },{
       path: 'submit',
-      component: () => import('@/views/problem/Submit')
+      component: () => import('../views/problem/Submit')
     }]
   },
   {
     path: '/rank',
     name: 'rank',
-    component: () => import('@/views/Rank')
+    component: () => import('../views/Rank')
   },
   {
     path: '/contests',
     name: 'contests',
-    component: () => import('@/views/Contests')
+    component: () => import('../views/Contests')
   },
   {
     path: '/contest/:contestId',
     name: 'contest',
-    component: () => import('@/views/contest/Contest'),
+    component: () => import('../views/contest/Contest'),
     children: [{
       path: 'problems',
-      component: () => import('@/views/contest/Problems')
+      component: () => import('../views/contest/Problems')
     },{
       path: 'status',
-      component: () => import('@/views/Status')
+      component: () => import('../views/Status')
     },{
       path: 'my',
-      component: () => import('@/components/contest/contest-my-submit')
+      component: () => import('../components/contest/contest-my-submit')
     },{
       path: 'standings',
-      component: () => import('@/components/contest/contest-standings')
+      component: () => import('../components/contest/contest-standings')
     },]
   },
   {
     path: '/gym',
     name: 'gym',
-    component: () => import('@/views/Gym')
+    component: () => import('../views/Gym')
   },
   {
     path: '/status',
     name: 'status',
-    component: () => import('@/views/Status')
+    component: () => import('../views/Status')
   },
   {
     path: '/system',
     name: 'system',
-    component: () => import('@/views/System')
+    component: () => import('../views/System')
+  },
+  {
+    path: '/data',
+    name: 'data',
+    component: () => import('../views/testcase/Testcase')
   },
   {
     path: '/error/:code',
     name: 'error',
-    component: () => import('@/views/error/Error')
+    component: () => import('../views/error/Error')
   },
   {
     path: '*',
