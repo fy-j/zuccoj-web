@@ -28,8 +28,8 @@
             <a-pagination :current="currentPage" :total="pageCount" :pageSize="pageSize" @change="getProblemList"/>
           </div>
         </div>
-        <div>
-          {{problemId}}
+        <div v-else>
+          <problem-testcases-edit :problem-id="problemId"></problem-testcases-edit>
         </div>
       </div>
 
@@ -78,10 +78,12 @@ const columns = [
   }
 ];
 import TitleBoxFrame from '../../components/frame/title-box-frame'
+import ProblemTestcasesEdit from '../../components/admin/problem-testcases-edit'
 export default {
   name: "Testcase",
   components: {
-    'title-box-frame': TitleBoxFrame
+    'title-box-frame': TitleBoxFrame,
+    'problem-testcases-edit': ProblemTestcasesEdit
   },
   data() {
     return {

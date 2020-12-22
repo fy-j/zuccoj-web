@@ -42,6 +42,9 @@ export default new Vuex.Store({
           if (data.data.code === 200) {
             let Data = data.data.data
             state.user = Data
+            if (showMsg) {
+              that.$message.success('欢迎你, ' + Data.nickname)
+            }
           } else {
             if (showMsg) {
               that.$message.error(data.data.msg)

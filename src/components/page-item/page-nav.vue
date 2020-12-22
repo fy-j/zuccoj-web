@@ -135,9 +135,7 @@
         that.$http.post(that.$store.state.host + '/user/login', sendData)
         .then(data => {
           if (data.data.code === 200) {
-            let Data = data.data.data
-            that.$message.success("欢迎你，" + Data.nickname)
-            that.$store.commit('updateUserInfo', Data)
+            that.$store.commit('updateUser', true)
             that.login = {
               username: '',
               password: ''
