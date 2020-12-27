@@ -28,8 +28,8 @@
     <div>
       <input type="file" id="file1" style="display: none" accept=".in,.txt" @change="inputFileSelect">
       <input type="file" id="file2" style="display: none" accept=".out,.ans,.txt" @change="outputFileSelect">
-      <input type="file" id="file3" style="display: none" accept=".zip" @change="zipFileSelect">
-      <a-space :size="30" align="start">
+      <input type="file" id="file3" style="display: none" a  ccept=".zip" @change="zipFileSelect">
+      <a-space :size="20" align="start">
         <a-space :size="10" direction="vertical">
           <h2>新增单个测试点</h2>
           <div style="width: 500px">

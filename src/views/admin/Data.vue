@@ -2,7 +2,7 @@
   <title-box-frame title="题目数据管理">
     <template v-slot:content>
       <div>
-        <a-breadcrumb style="margin: 15px 0">
+        <a-breadcrumb style="margin-top: 15px">
           <a-breadcrumb-item><span></span></a-breadcrumb-item>
           <a-breadcrumb-item><router-link :to="{name:'home'}">首页</router-link></a-breadcrumb-item>
           <a-breadcrumb-item><router-link :to="{name:'data'}">所有题目</router-link></a-breadcrumb-item>
@@ -10,6 +10,9 @@
         </a-breadcrumb>
 
         <div v-if="isRoot">
+          <div class="add-button">
+            <a-button type="primary" icon="plus" size="large" @click="$router.push({name: 'new_problem'})">新建题目</a-button>
+          </div>
           <a-table :columns="columns" :data-source="problemList" size="middle" :pagination="false" :loading="loading">
             <span slot="problemId" slot-scope="problemId">
               <b>{{problemId}}</b>
@@ -32,7 +35,6 @@
           <problem-testcases-edit :problem-id="problemId"></problem-testcases-edit>
         </div>
       </div>
-
     </template>
   </title-box-frame>
 </template>
@@ -160,5 +162,10 @@ export default {
 </script>
 
 <style scoped>
-
+  .add-button{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
 </style>

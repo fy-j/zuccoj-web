@@ -75,7 +75,12 @@ const routes = [
   {
     path: '/data',
     name: 'data',
-    component: () => import('../views/testcase/Testcase')
+    component: () => import('../views/admin/Data')
+  },
+  {
+    path: '/new_problem',
+    name: 'new_problem',
+    component: () => import('../views/admin/NewProblem')
   },
   {
     path: '/error/:code',
