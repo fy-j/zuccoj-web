@@ -1,13 +1,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '../router'
 
 Vue.use(Vuex)
 
 const host = 'http://localhost:8080'
 const file_host = 'http://localhost:8080'
 
+const PermissionLevel = {
+  ANYONE: -999,
+  FORBIDDEN: -1,
+  COMMON: 0,
+  DATA_VIEWER: 100,
+  CODE_VIEWER: 200,
+  ADMIN: 999
+}
+
 export default new Vuex.Store({
   state: {
+    PermissionLevel,
     host: host,
     file_host: file_host,
     current_page: [],
@@ -73,6 +84,30 @@ export default new Vuex.Store({
         })
         .finally(() => {
         })
+    },
+    permissionCheck(state, level) {
+      let that = this._vm
+      that.$http.get(state.host + '/user/check?level='+level)
+        .then(data => {
+          if (data.data.code === 403) {
+            router.replace({
+              name: 'error',
+              params: {
+                code: String(403)
+              }
+            })
+          }
+        })
+    },
+    errorPage(state, code) {
+      if ([403, 404, 500, '403', '404', '500'].indexOf(code) !== -1) {
+        router.replace({
+          name: 'error',
+          params: {
+            code: String(code)
+          }
+        })
+      }
     }
   },
   actions: {

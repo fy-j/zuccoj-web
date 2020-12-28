@@ -5,8 +5,8 @@
         <span slot="problemId" slot-scope="problemId">
           <b>{{problemId}}</b>
         </span>
-        <a :href="'#/contest/'+contestInfo.contestId+'/problem/'+record.problemId" slot="problemTitle" slot-scope="problemTitle, record" v-if="contestInfo">{{problemTitle}}</a>
-        <a :href="'#/problem/'+record.problemId" slot="problemTitle" slot-scope="problemTitle, record" v-else>{{problemTitle}}</a>
+        <router-link :to="{path:`/contest/${contestInfo.contestId}/problem/${record.problemId}`}" slot="problemTitle" slot-scope="problemTitle, record" v-if="contestInfo">{{problemTitle}}</router-link>
+        <router-link :to="{path:`/problem/${record.problemId}/`}" slot="problemTitle" slot-scope="problemTitle, record" v-else>{{problemTitle}}</router-link>
         <template slot="statusIcon" slot-scope="statusIcon">
           <a-icon v-if="statusIcon === 1"  type="check" style="color: green"/>
           <a-icon v-else-if="statusIcon === -1" type="close" style="color: red"/>
@@ -16,7 +16,7 @@
         </template>
       </a-table>
       <div class="table-pagination-box" v-if="!contestInfo">
-        <a-pagination :default-current="6" :total="500" />
+        <a-pagination :current="page" :total="count" :pageSize="pageSize" @change="pageChange"/>
       </div>
     </template>
   </base-box-frame>
@@ -77,7 +77,10 @@ export default {
   },
   props: {
     problemList: Array,
-    contestInfo: Object
+    contestInfo: Object,
+    page: Number,
+    pageSize: Number,
+    count: Number,
   },
   data() {
     return {
@@ -99,6 +102,9 @@ export default {
         return 'table-right-row'
       }
       return ''
+    },
+    pageChange(page) {
+      this.$emit('pageChange', page)
     }
   }
 }

@@ -110,7 +110,7 @@ export default {
       let sendData = new FormData()
       sendData.append('page', page)
       sendData.append('pageSize', pageSize)
-      that.$http.post(that.$store.state.host + '/problem/get', sendData)
+      that.$http.post(that.$store.state.host + '/problem/getProblemListForAdmin', sendData)
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data
@@ -119,14 +119,7 @@ export default {
               that.currentPage = Data.page
             } else {
               that.$message.error(data.data.msg)
-              if (data.data.code === 403) {
-                that.$router.replace({
-                  name: 'error',
-                  params: {
-                    code: '403'
-                  }
-                })
-              }
+              that.$store.commit('errorPage', data.data.code)
             }
           })
           .catch(() => {

@@ -78,7 +78,7 @@ const routes = [
     component: () => import('../views/admin/Data')
   },
   {
-    path: '/new_problem',
+    path: '/newProblem',
     name: 'new_problem',
     component: () => import('../views/admin/NewProblem')
   },

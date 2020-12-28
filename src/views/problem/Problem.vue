@@ -5,7 +5,9 @@
         <router-view />
       </a-col>
       <a-col class="gutter-row" :span="6">
-        <problem-right-box :problem-info="problemInfo"></problem-right-box>
+        <a-spin :spinning="loading">
+          <problem-right-box :problem-info="problemInfo"></problem-right-box>
+        </a-spin>
       </a-col>
     </a-row>
   </div>
@@ -20,14 +22,40 @@ export default {
   },
   data () {
     return {
-      problemInfo: {
-        problemId: '1000',
-        timeLimit: 1000,
-        memoryLimit: 64,
-        submitted: 2202,
-        solved: 1579
-      }
+      loading: true,
+      problemInfo: {}
     }
+  },
+  methods: {
+    getData() {
+      let that = this
+      let problemId = that.$route.params.problemId
+      if (!problemId) {
+        that.$store.commit('errorPage', 404)
+        return
+      }
+      that.loading = true
+      that.$http.get(that.$store.state.host + '/problem/info?problemId='+problemId)
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              Data.tags = JSON.parse(Data.tags)
+              that.problemInfo = Data
+            } else {
+              // that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.loading = false
+          })
+    }
+  },
+  created() {
+    this.getData()
   }
 }
 </script>

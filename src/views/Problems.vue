@@ -1,7 +1,9 @@
 <template>
   <a-row :gutter="16">
-    <a-col class="gutter-row" :span="18">
-      <problem-list :problem-list="problemList"></problem-list>
+    <a-col class="gutter-row" :span="18" loading>
+      <a-spin :spinning="loading">
+        <problem-list :problem-list="problemList" :count="pageCount" :page="currentPage" :pageSize="pageSize" @pageChange="gotoPage"></problem-list>
+      </a-spin>
     </a-col>
     <a-col class="gutter-row" :span="6">
       <title-box-frame title="搜索题目">
@@ -16,168 +18,7 @@
 </template>
 
 <script>
-const problemList = [
-  {
-    problemId: 1000,
-    title: 'A+B Problem',
-    solved: 1576,
-    submitted: 2202,
-    tags: ['入门'],
-    status: 1
-  },
-  {
-    problemId: 1001,
-    title: '鸡兔同笼',
-    solved: 795,
-    submitted: 1991,
-    tags: ['数学'],
-    status: 0
-  },
-  {
-    problemId: 1002,
-    title: '斐波那契数列',
-    solved: 86,
-    submitted: 1192,
-    tags: ['规律','数学'],
-    status: -1
-  },
-  {
-    problemId: 1003,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 1
-  },
-  {
-    problemId: 1004,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: -1
-  },
-  {
-    problemId: 1005,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1006,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1007,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1008,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1009,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1010,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1011,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1012,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1013,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: -1
-  },
-  {
-    problemId: 1014,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1015,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1016,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1017,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 1
-  },
-  {
-    problemId: 1018,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-  {
-    problemId: 1019,
-    title: '打印螺旋矩阵',
-    solved: 279,
-    submitted: 773,
-    tags: ['模拟'],
-    status: 0
-  },
-];
+const pageSize = 20
 import ProblemList from '@/components/problem/problem-list'
 import TitleBoxFrame from '@/components/frame/title-box-frame'
 export default {
@@ -188,11 +29,65 @@ export default {
   },
   data() {
     return {
-      problemList
+      pageSize,
+      currentPage: 1,
+      pageCount: 0,
+      problemList: [],
+      loading: false
+    }
+  },
+  methods: {
+    getData(page) {
+      if (!page) {
+        page = 1
+      }
+      let that = this
+      that.loading = true
+      let sendData = new FormData()
+      sendData.append('page', page)
+      sendData.append('pageSize', pageSize)
+      that.$http.post(that.$store.state.host + '/problem/getProblemSet', sendData)
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              that.problemList = Data.problems
+              for (let item of that.problemList) {
+                item.tags = JSON.parse(item.tags)
+              }
+              that.pageCount = Data.count
+              that.currentPage = Data.page
+            } else {
+              that.$message.error(data.data.msg)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.loading = false
+          })
+    },
+    pageUpdate() {
+      this.currentPage = this.$route.query.page
+      this.getData(this.currentPage)
+    },
+    gotoPage(page) {
+      this.$router.push({
+        name: 'problems',
+        query: {
+          page: page
+        }
+      })
     }
   },
   created() {
     this.$store.commit('updateCurrentPage', 'problems')
+    this.getData(this.$route.query.page)
+  },
+  watch: {
+    '$route': function () {
+      this.pageUpdate()
+    }
   }
 }
 </script>

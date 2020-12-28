@@ -2,17 +2,17 @@
   <base-box-frame>
     <template v-slot:content>
       <div style="margin-top: 20px">
-        <div class="contest-right-button" @click="() => {$router.push('/problem/'+problemInfo.problemId+'/submit')}">
+        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/submit`})}">
           <a-icon type="upload" /> <span style="margin-left: 10px">提交代码</span>
         </div>
         <a-divider />
-        <div class="contest-right-button" @click="() => {$router.push('/problem/'+problemInfo.problemId)}">
+        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}`})}">
           <a-icon type="profile" /> <span style="margin-left: 10px">题目描述</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push('/problem/'+problemInfo.problemId+'/my')}">
+        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/my`})}">
           <a-icon type="menu" /> <span style="margin-left: 10px">我的提交</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push('/problem/'+problemInfo.problemId+'/all')}">
+        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/all`})}">
           <a-icon type="code" /> <span style="margin-left: 10px">所有提交</span>
         </div>
         <a-divider />
@@ -27,7 +27,7 @@
           </div>
           <div class="description-item-box">
             <span class="description-item-title">内存限制</span>
-            <span class="description-item-content">{{ problemInfo.memoryLimit }}MB</span>
+            <span class="description-item-content">{{ problemInfo.memoryLimit/1024 }}MB</span>
           </div>
           <div class="description-item-box">
             <span class="description-item-title">提交数</span>
@@ -37,11 +37,17 @@
             <span class="description-item-title">通过数</span>
             <span class="description-item-content">{{ problemInfo.solved }}</span>
           </div>
-          <div class="description-item-box">
+          <div class="description-item-box" v-if="problemInfo.submitted">
             <span class="description-item-title">通过率</span>
             <span class="description-item-content">{{ (problemInfo.solved/problemInfo.submitted*100).toFixed(2) }}%</span>
           </div>
         </div>
+        <template v-if="problemInfo.tags && problemInfo.tags.length > 0">
+          <a-divider />
+          <div style="margin-bottom: 24px;padding: 0 30px;display: flex;justify-content: center">
+            <a-tag v-for="(tag, index) in problemInfo.tags" :key="tag+index">{{tag}}</a-tag>
+          </div>
+        </template>
       </div>
     </template>
   </base-box-frame>
@@ -57,6 +63,10 @@ export default {
   props: {
     problemInfo: Object
   },
+  data() {
+    return {
+    }
+  }
 }
 </script>
 

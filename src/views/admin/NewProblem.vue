@@ -1,7 +1,7 @@
 <template>
   <title-box-frame title="新建题目">
     <template v-slot:content>
-      <div class="new-form">
+      <div class="new-form" v-if="!newSuccess">
         <div class="form-box-50">
           <h2>题目标题</h2>
           <a-input size="large" placeholder="题目标题" v-model="title" />
@@ -78,7 +78,22 @@
         <a-divider />
         <a-button type="primary" :loading="submitting" @click="newProblemSubmit">保存</a-button>
       </div>
-
+      <div v-else>
+        <a-result
+            status="success"
+            :title="'题目'+title+'新建成功!'"
+            :sub-title="'该题目的编号为：'+newProblemId+'，你可为其上传完整数据或查看该题目'"
+        >
+          <template #extra>
+            <a-button type="primary" @click="$router.push({name:'data',query:{problemId: newProblemId}})">
+              上传数据
+            </a-button>
+            <a-button >
+              查看题目
+            </a-button>
+          </template>
+        </a-result>
+      </div>
     </template>
   </title-box-frame>
 </template>
@@ -109,7 +124,9 @@ export default {
       tagInput: '',
       isSpj: false,
       spjCode: '',
-      submitting: false
+      submitting: false,
+      newSuccess: true,
+      newProblemId: 0
     }
   },
   methods: {
@@ -183,7 +200,8 @@ export default {
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data
-              console.log(Data)
+              that.newSuccess = true
+              that.newProblemId = Data.problemId
             } else {
               that.$message.error(data.data.msg)
               if (data.data.code === 403) {
@@ -203,6 +221,9 @@ export default {
             that.submitting = false
           })
     }
+  },
+  created() {
+    this.$store.commit('permissionCheck', this.$store.state.PermissionLevel.ADMIN)
   }
 }
 </script>

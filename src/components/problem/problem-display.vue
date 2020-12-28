@@ -21,8 +21,8 @@ export default {
   },
   methods: {
     problemJoint() {
-      this.problemContent1 = '# ' + this.problem.problemId +'. ' + this.problem.problemName + '\n\n'
-      this.problemContent1 += '*TimeLimit: '+this.problem.timeLimit+'ms\t MemoryLimit: '+this.problem.memoryLimit+'MB*\n\n'
+      this.problemContent1 = '# ' + this.problem.problemId +'. ' + this.problem.title + '\n\n'
+      this.problemContent1 += '*TimeLimit: '+this.problem.timeLimit+'ms\n MemoryLimit: '+(this.problem.memoryLimit/1024).toFixed(0)+'MB*\n\n'
       if (this.problem.description) {
         this.problemContent1 += '## Description\n\n' + this.problem.description + '\n\n'
       }
@@ -32,10 +32,10 @@ export default {
       if (this.problem.output) {
         this.problemContent1 += '## Output\n\n' + this.problem.output + '\n\n'
       }
-      if (this.problem.sample.length) {
-        let isOnlyOne = (this.problem.sample.length === 1)
-        for (let idx in this.problem.sample) {
-          let sampleData = this.problem.sample[idx]
+      if (this.problem.samples.length) {
+        let isOnlyOne = (this.problem.samples.length === 1)
+        for (let idx in this.problem.samples) {
+          let sampleData = this.problem.samples[idx]
           this.problemContent1 += '## Sample '
           if (!isOnlyOne) {
             this.problemContent1 += (Number(idx)+1)

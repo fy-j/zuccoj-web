@@ -19,7 +19,7 @@
         </a-select>
         <br><br>
         代码：
-        <code-editor style="min-height: 500px"></code-editor>
+        <code-editor v-model="code" :lang="language" style="min-height: 500px"></code-editor>
         <br>
         <a-button type="primary" :loading="submitting" @click="submitCode" :disabled="submitting">提交</a-button>
       </div>
@@ -39,7 +39,8 @@ export default {
   data() {
     return {
       language: 'text/x-c++src',
-      submitting: false
+      submitting: false,
+      code: ''
     }
   },
   methods: {

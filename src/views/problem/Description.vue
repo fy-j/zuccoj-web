@@ -1,7 +1,8 @@
 <template>
   <base-box-frame>
     <template v-slot:content>
-      <problem-display :problem="problem"></problem-display>
+      <problem-display :problem="problem" v-if="problem && !loading"></problem-display>
+      <loading-box-frame v-if="loading" height="700px"></loading-box-frame>
     </template>
   </base-box-frame>
 </template>
@@ -9,35 +10,50 @@
 <script>
 import BaseBoxFrame from '@/components/frame/base-box-frame'
 import ProblemDisplay from '@/components/problem/problem-display'
+import LoadingBoxFrame from '@/components/frame/loading-box-frame'
 export default {
   name: "Description",
   components: {
     'base-box-frame': BaseBoxFrame,
-    'problem-display': ProblemDisplay
+    'problem-display': ProblemDisplay,
+    'loading-box-frame': LoadingBoxFrame
   },
   data() {
     return {
-      problem: {
-        problemId: '1000',
-        problemName: 'A+B Problem',
-        timeLimit: 1000,
-        memoryLimit: 64,
-        description: '计算 $A+B$ 的值',
-        input: '第一行两个整数 $A,B(1\\leq A,B \\leq 2 \\times 10^9)$',
-        output: '仅一个整数，表示 $A+B$ 的结果',
-        sample: [{
-          input: '1 2',
-          output: '3'
-        },{
-          input: '10 1',
-          output: '11'
-        },{
-          input: '10000 10000',
-          output: '20000'
-        }],
-        hint: '结果可能超过 `int` 的范围'
-      }
+      loading: true,
+      problem: null
     }
+  },
+  methods: {
+    getData() {
+      let that = this
+      let problemId = that.$route.params.problemId
+      if (!problemId) {
+        that.$store.commit('errorPage', 404)
+        return
+      }
+      that.loading = true
+      that.$http.get(that.$store.state.host + '/problem/display?problemId='+problemId)
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              Data.samples = JSON.parse(Data.samples)
+              that.problem = Data
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.loading = false
+          })
+    }
+  },
+  created() {
+    this.getData()
   }
 }
 </script>
