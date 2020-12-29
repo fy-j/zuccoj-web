@@ -83,6 +83,11 @@ const routes = [
     component: () => import('../views/admin/NewProblem')
   },
   {
+    path: '/solution/:solutionId',
+    name: 'solution',
+    component: () => import('../views/solution/Solution')
+  },
+  {
     path: '/error/:code',
     name: 'error',
     component: () => import('../views/error/Error')

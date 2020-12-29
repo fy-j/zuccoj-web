@@ -9,7 +9,8 @@ export default {
   name: "file-size",
   props: {
     size: Number,
-    unit: String
+    unit: String,
+    fixx: Number
   },
   data() {
     return {
@@ -37,7 +38,7 @@ export default {
       if (!u) {
         this.show = '!ERROR!'
       }
-      this.show = s.toFixed(2) + u
+      this.show = s.toFixed(this.fixx!=null?this.fixx:2) + u
     }
   },
   created() {

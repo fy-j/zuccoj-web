@@ -44,13 +44,39 @@ export default {
     }
   },
   methods: {
+    getLangCode(s) {
+      switch (s) {
+        case 'text/x-csrc': return 1;
+        case 'text/x-c++src': return 2;
+        case 'text/x-java': return 3;
+        default: return 0;
+      }
+    },
     submitCode() {
       let that = this
       that.submitting = true
-      setTimeout(()=>{
-        that.submitting = false
-        that.$message.success('代码提交成功')
-      },1000)
+      let sendData = new FormData()
+      sendData.append('problemId', that.$route.params.problemId)
+      sendData.append('lang', that.getLangCode(that.language))
+      sendData.append('code', that.code)
+      that.$http.post(that.$store.state.host + '/solution/submit', sendData)
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              let solutionId = Data.solutionId;
+              that.$message.success('提交成功')
+              that.$router.push({path:`/solution/${solutionId}`})
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.submitting = false
+          })
     }
   }
 }

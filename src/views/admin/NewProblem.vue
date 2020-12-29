@@ -88,7 +88,7 @@
             <a-button type="primary" @click="$router.push({name:'data',query:{problemId: newProblemId}})">
               上传数据
             </a-button>
-            <a-button >
+            <a-button @click="$router.push({path:`/problem/${newProblemId}/description`})">
               查看题目
             </a-button>
           </template>
@@ -119,13 +119,13 @@ export default {
       memoryLimit: 256,
       spj: '',
       samples: [],
-      tags: ['数学','模拟'],
+      tags: [],
       inputVisible: false,
       tagInput: '',
       isSpj: false,
       spjCode: '',
       submitting: false,
-      newSuccess: true,
+      newSuccess: false,
       newProblemId: 0
     }
   },
@@ -183,9 +183,6 @@ export default {
       }
       if (that.output !== '') {
         sendData.append('output', that.output)
-      }
-      if (that.hint !== '') {
-        sendData.append('hint', that.hint)
       }
       if (that.hint !== '') {
         sendData.append('hint', that.hint)
