@@ -34,12 +34,10 @@
           <a-descriptions-item label="评测姬">
             Kulota
           </a-descriptions-item>
-          <a-descriptions-item label="编译信息" :span="3" v-if="solutionData.remark">
-            <markdown-display :content="`\`\`\`\n${solutionData.remark}\n\`\`\``"></markdown-display>
-          </a-descriptions-item>
         </a-descriptions>
       </div>
-      <markdown-display :content="`\`\`\`${nameInMd(solutionData.lang)}\n${solutionData.code}\n\`\`\``"></markdown-display>
+      <markdown-display v-if="solutionData.code" :content="`**用户代码**\n\`\`\`${nameInMd(solutionData.lang)}\n${solutionData.code}\n\`\`\``"></markdown-display>
+      <markdown-display v-if="solutionData.remark" :content="`**编译信息**\n\`\`\`\n${solutionData.remark}\n\`\`\``"></markdown-display>
     </template>
   </base-box-frame>
 </template>
@@ -98,6 +96,11 @@ export default {
   },
   created() {
     this.getData()
+  },
+  watch: {
+    '$route': function () {
+      this.getData()
+    }
   }
 }
 </script>

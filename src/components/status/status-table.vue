@@ -1,39 +1,40 @@
 <template>
       <a-table :columns="selfTable?myColumns:columns" :data-source="statusData" size="small" :pagination="false">
         <span slot="solutionId" slot-scope="solutionId">
-          <b>{{solutionId}}</b>
+          <router-link :to="{path:`/solution/${solutionId}/`}">{{solutionId}}</router-link>
         </span>
 
-        <span slot="nickname" slot-scope="nickname, record">
-          <a :href="'#/user/'+record.username">{{nickname}}</a>
+        <span slot="username" slot-scope="username">
+          <a :href="'#/user/'+username">{{username}}</a>
         </span>
 
         <span slot="problemId" slot-scope="problemId">
-          <a :href="'#/problem/'+problemId">{{problemId}}</a>
+          <router-link :to="{path:`/problem/${problemId}/`}">{{problemId}}</router-link>
         </span>
 
         <span slot="judgeResultResult" slot-scope="record">
-          <status-solution-result :code="record.judgeResult.result"></status-solution-result>
+          <status-solution-result :code="record.result"></status-solution-result>
         </span>
 
         <span slot="judgeResultLang" slot-scope="record">
-          {{record.judgeResult.language}}
+          {{ (record.lang===1)?('C'):((record.lang===2)?('C++'):((record.lang===3)?('Java'):('UNKNOWN')))}}
         </span>
 
         <span slot="judgeResultTime" slot-scope="record">
-          {{record.judgeResult.time}}
+          {{record.timeUsed}}
         </span>
 
         <span slot="judgeResultMemory" slot-scope="record">
-          {{record.judgeResult.memory}}
+          {{record.memoryUsed}}
         </span>
 
         <span slot="judgeResultLength" slot-scope="record">
-          {{record.judgeResult.length}}
+          {{record.codeLength}}
         </span>
 
         <span slot="submitTime" slot-scope="submitTime">
-          {{ $store.state.dateFormat(submitTime, true) }}
+<!--          {{  $store.state.dateFormat(submitTime, true) }}-->
+          {{ submitTime }}
         </span>
 
       </a-table>
@@ -50,9 +51,9 @@ const columns = [
   },
   {
     title: '用户',
-    dataIndex: 'nickname',
-    key: 'nickname',
-    scopedSlots: { customRender: 'nickname' },
+    dataIndex: 'username',
+    key: 'username',
+    scopedSlots: { customRender: 'username' },
     align: 'center'
   },
   {
@@ -97,7 +98,7 @@ const columns = [
     dataIndex: 'submitTime',
     key: 'submitTime',
     scopedSlots: { customRender: 'submitTime' },
-    width: '150px',
+    width: '160px',
     align: 'center'
   },
 ];
@@ -144,7 +145,7 @@ const myColumns = [
     dataIndex: 'submitTime',
     key: 'submitTime',
     scopedSlots: { customRender: 'submitTime' },
-    width: '150px',
+    width: '160px',
     align: 'center'
   },
 ];
