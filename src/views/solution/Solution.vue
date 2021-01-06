@@ -32,7 +32,7 @@
             <file-size :size="solutionData.memoryUsed" unit="KB"></file-size>
           </a-descriptions-item>
           <a-descriptions-item label="评测姬">
-            Kulota
+            {{ solutionData.judgehost }}
           </a-descriptions-item>
         </a-descriptions>
       </div>
