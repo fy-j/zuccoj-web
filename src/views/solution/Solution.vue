@@ -81,6 +81,9 @@ export default {
             if (data.data.code === 200) {
               let Data = data.data.data
               that.solutionData = Data
+              if (Data.result === -1) {
+                that.pendingUpdate()
+              }
             } else {
               that.$message.error(data.data.msg)
               that.$store.commit('errorPage', data.data.code)
@@ -92,6 +95,34 @@ export default {
           .finally(() => {
             that.loading = false
           })
+    },
+    updateSolutionResult(solutionId) {
+      let that = this
+      that.$http.get(that.$store.state.host + '/solution/result?solutionId=' + solutionId)
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              if (Data.result === -1) {
+                that.pendingUpdate()
+              } else {
+                for (let n in Data) {
+                  that.solutionData[n] = Data[n]
+                }
+              }
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+          })
+    },
+    pendingUpdate() {
+      let that = this
+      let solutionId = that.$route.params.solutionId
+      setTimeout(() => {
+        that.updateSolutionResult(solutionId)
+      }, 5000)
     }
   },
   created() {
