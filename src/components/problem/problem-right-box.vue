@@ -93,9 +93,11 @@ export default {
   font-size: 14px;
   padding: 0 40px;
   color: black;
+  transition: 0.5s;
 }
 .contest-right-button:hover{
   background: rgb(244,244,244);
   cursor: pointer;
+  box-shadow: inset 30px 0 0 -20px rgb(24,144,255);
 }
 </style>
