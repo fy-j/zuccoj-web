@@ -10,16 +10,16 @@
 
         <div class="foot-content-box">
           <b class="foot-title">管理</b>
-          <a class="foot-item" href="#/system">系统状态</a>
-          <a class="foot-item" href="#/data">数据管理</a>
-          <a class="foot-item">管理后台</a>
+          <router-link class="foot-item" :to="{path:'/system'}">系统状态</router-link>
+          <router-link class="foot-item" :to="{path:'/data'}">数据管理</router-link>
+          <router-link class="foot-item" :to="{path:'/admin'}">管理后台</router-link>
         </div>
 
         <div class="foot-content-box">
           <b class="foot-title">关于</b>
           <span class="foot-item" :title="'build '+buildVersion">ZUCC Online Judge &beta;</span>
           <span class="foot-item">&copy; {{ new Date().getFullYear() }} ZUCC ACM LAB</span>
-          <span class="foot-item">Powered by <a>@KeadinZhou</a></span>
+          <span class="foot-item">Powered by <a href="https://github.com/KeadinZhou" target="_blank">@KeadinZhou</a></span>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
       },
       created() {
         let version = new Date(document.getElementById("app-build-version").innerText)
-        this.buildVersion = ''+version.getFullYear()+this.fixZero(version.getMonth()+1)+this.fixZero(version.getDate())
+        this.buildVersion = ''+version.getFullYear()+this.fixZero(version.getMonth()+1)+this.fixZero(version.getDate())+':'+this.fixZero(version.getHours())+this.fixZero(version.getMinutes())
       }
     }
 </script>

@@ -11,16 +11,17 @@
         </a-menu>
         <div class="user-box">
           <template v-if="$store.state.user">
-            <a-dropdown-button>
-              {{$store.state.user.nickname}}
+            <a-dropdown>
+              <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+                <a-icon type="user" /> {{$store.state.user.nickname}} <a-icon type="down" />
+              </a>
               <a-menu slot="overlay">
                 <a-menu-item key="1">账号设置</a-menu-item>
                 <a-menu-item key="2">提交记录</a-menu-item>
                 <a-menu-divider />
                 <a-menu-item key="3" @click="logoutSubmit">退出登录</a-menu-item>
               </a-menu>
-              <a-icon slot="icon" type="user" />
-            </a-dropdown-button>
+            </a-dropdown>
           </template>
           <template v-else>
             <a-button type="primary" @click="()=>(loginModalVisible = true)">登录</a-button>
@@ -55,33 +56,49 @@
         cancel-text="取消"
         @ok="regCheck"
     >
-      <a-alert
-          message="校内同学请使用学号作为username，使用真实姓名作为nickname"
-          type="info"
-          show-icon
-      />
-      <a-input v-model="reg.username" placeholder="Username *" size="large" class="nav-input">
-        <a-icon slot="prefix" type="user" />
-      </a-input>
-      <a-input v-model="reg.nickname" placeholder="Nickname *" size="large" class="nav-input">
-        <a-icon slot="prefix" type="smile" />
-      </a-input>
-      <a-input v-model="reg.password" placeholder="Password *" size="large" type="password" class="nav-input">
-        <a-icon slot="prefix" type="lock" />
-      </a-input>
-      <a-input v-model="reg.password2" placeholder="Repeat Password *" size="large" type="password" class="nav-input">
-        <a-icon slot="prefix" type="lock" />
-      </a-input>
-      <a-input v-model="reg.email" placeholder="Email" size="large" type="email" class="nav-input">
-        <a-icon slot="prefix" type="mail" />
-      </a-input>
-      <a-input v-model="reg.school" placeholder="School" size="large" class="nav-input">
-        <a-icon slot="prefix" type="home" />
-      </a-input>
-      <a-input v-model="reg.captcha" placeholder="Captcha *" size="large" class="nav-input">
-        <a-icon slot="prefix" type="safety" />
-        <img slot="suffix" src="@/assets/CAPTCHA.jpg" alt="" width="100%">
-      </a-input>
+      <a-form-model :rules="regRules" :model="reg" ref="regForm">
+        <a-alert
+            message="校内同学请使用学号作为username，使用真实姓名作为nickname"
+            type="info"
+            show-icon
+        />
+        <a-form-model-item prop="username">
+          <a-input v-model="reg.username" placeholder="Username *" size="large" class="nav-input">
+            <a-icon slot="prefix" type="user" />
+          </a-input>
+        </a-form-model-item>
+        <a-form-model-item prop="nickname">
+          <a-input v-model="reg.nickname" placeholder="Nickname *" size="large" class="nav-input">
+            <a-icon slot="prefix" type="smile" />
+          </a-input>
+        </a-form-model-item>
+        <a-form-model-item prop="password">
+          <a-input v-model="reg.password" placeholder="Password *" size="large" type="password" class="nav-input">
+            <a-icon slot="prefix" type="lock" />
+          </a-input>
+        </a-form-model-item>
+        <a-form-model-item prop="password2">
+          <a-input v-model="reg.password2" placeholder="Repeat Password *" size="large" type="password" class="nav-input">
+            <a-icon slot="prefix" type="lock" />
+          </a-input>
+        </a-form-model-item>
+        <a-form-model-item prop="email">
+          <a-input v-model="reg.email" placeholder="Email" size="large" type="email" class="nav-input">
+            <a-icon slot="prefix" type="mail" />
+          </a-input>
+        </a-form-model-item>
+        <a-form-model-item prop="school">
+          <a-input v-model="reg.school" placeholder="School" size="large" class="nav-input">
+            <a-icon slot="prefix" type="home" />
+          </a-input>
+        </a-form-model-item>
+        <a-form-model-item prop="captcha">
+          <a-input v-model="reg.captcha" placeholder="Captcha *" size="large" class="nav-input">
+            <a-icon slot="prefix" type="safety" />
+            <img slot="suffix" :src="captchaUrl" @click="() => {this.captchaUrl = this.$store.state.host+'/captcha/get?p='+new Date().getTime()}" alt="看不清? 单击更换图片" width="100%" title="看不清? 单击更换图片">
+          </a-input>
+        </a-form-model-item>
+      </a-form-model>
     </a-modal>
   </a-affix>
 </template>
@@ -95,6 +112,7 @@
         loginSubmitting: false,
         regModalVisible: false,
         regSubmitting: false,
+        captchaUrl: this.$store.state.host+'/captcha/get?p='+new Date().getTime(),
         login: {
           username: '',
           password: ''
@@ -107,6 +125,28 @@
           school: '',
           email: '',
           captcha : ''
+        },
+        regRules: {
+          username: [
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+            { min: 6, max: 16, message: '长度在6-16之间', trigger: 'blur'},
+            { validator: this.usernameCheck, trigger: 'change' }
+          ],
+          nickname: [
+            { required: true, message: '请输入昵称', trigger: 'blur' },
+            { min: 6, max: 16, message: '长度在6-16之间', trigger: 'blur'},
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+            { min: 6, max: 20, message: '长度在6-20之间', trigger: 'blur'},
+          ],
+          password2: [
+            { required: true, message: '请再次输入密码', trigger: 'blur' },
+            { validator: this.password2Check, trigger: 'blur' }
+          ],
+          captcha: [
+            { required: true, message: '请输入验证码', trigger: 'blur' },
+          ]
         }
       }
     },
@@ -136,6 +176,7 @@
         .then(data => {
           if (data.data.code === 200) {
             that.$store.commit('updateUser', true)
+            that.loginModalVisible = false
             that.login = {
               username: '',
               password: ''
@@ -149,56 +190,75 @@
         })
         .finally(() => {
           that.loginSubmitting = false
-          that.loginModalVisible = false
         })
-        setTimeout(()=>{
-        }, 500)
       },
       logoutSubmit() {
         let that = this
         that.$store.commit('logout')
       },
+      usernameCheck(rule, value, callback) {
+        if (!/^[A-Za-z0-9._]{6,16}$/.test(value)) {
+          callback(new Error('只能含有字母、数字、小数点和下划线，且长度在6-16之间'))
+        } else {
+          callback()
+        }
+      },
+      password2Check(rule, value, callback) {
+        if (value !== this.reg.password) {
+          callback(new Error('两次密码不一致'))
+        } else {
+          callback()
+        }
+      },
       regCheck() {
         let that = this
-        if (!that.reg.username) {
-          that.$message.error('请输入用户名')
-          return
-        }
-        if (!that.reg.nickname) {
-          that.$message.error('请输入昵称')
-          return
-        }
-        if (!that.reg.password) {
-          that.$message.error('请输入密码')
-          return
-        }
-        if (!that.reg.password2) {
-          that.$message.error('请重复输入密码')
-          return
-        }
-        if (that.reg.password !== that.reg.password2) {
-          that.$message.error('两次输入密码不一致')
-          return
-        }
-        if (!that.reg.captcha) {
-          that.$message.error('请输入验证码')
-          return
-        }
-        that.regSubmit()
+        that.$refs["regForm"].validate(valid => {
+          if (valid) {
+            that.regSubmit()
+          }
+        })
       },
       regSubmit() {
         let that = this
         that.regSubmitting = true
-        setTimeout(()=>{
-          that.$message.success("注册成功")
-          that.login = {
-            username: that.reg.username,
-            password: that.reg.password
-          }
-          that.loginCheck()
-          that.regSubmitting = false
-          that.regModalVisible = false
-        }, 500)
+
+        let sendData = new FormData()
+        sendData.append('username', that.reg.username)
+        sendData.append('nickname', that.reg.nickname)
+        sendData.append('password', that.reg.password)
+        sendData.append('school', that.reg.school)
+        sendData.append('email', that.reg.email)
+        sendData.append('captcha', that.reg.captcha)
+
+        that.$http.post(that.$store.state.host + '/user/register', sendData)
+            .then(data => {
+              if (data.data.code === 200) {
+                that.$message.success("注册成功")
+                that.regModalVisible = false
+                that.login = {
+                  username: that.reg.username,
+                  password: that.reg.password
+                }
+                that.loginCheck()
+                that.reg = {
+                  username: '',
+                  nickname: '',
+                  password: '',
+                  password2: '',
+                  school: '',
+                  email: '',
+                  captcha : ''
+                }
+              } else {
+                that.$message.error(data.data.msg)
+              }
+            })
+            .catch(() => {
+              that.$message.error('系统错误')
+            })
+            .finally(() => {
+              that.regSubmitting = false
+            })
       }
     }
   }
@@ -228,5 +288,8 @@
   }
   .nav-input{
     margin-top: 10px;
+  }
+  .ant-form-item{
+    margin-bottom: 0;
   }
 </style>

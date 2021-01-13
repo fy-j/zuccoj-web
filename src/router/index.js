@@ -88,6 +88,11 @@ const routes = [
     component: () => import('../views/solution/Solution')
   },
   {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('../views/Admin')
+  },
+  {
     path: '/error/:code',
     name: 'error',
     component: () => import('../views/error/Error')
