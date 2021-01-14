@@ -16,19 +16,19 @@
         </div>
         <div class="form-box-100">
           <h2>题目描述</h2>
-          <mavon-editor placeholder="题目描述" :autofocus="false" v-model="description"></mavon-editor>
+          <markdown-editor placeholder="题目描述" v-model="description"></markdown-editor>
         </div>
         <div class="form-box-100">
           <h2>输入格式</h2>
-          <mavon-editor placeholder="输入格式" :autofocus="false" v-model="input"></mavon-editor>
+          <markdown-editor placeholder="输入格式" v-model="input"></markdown-editor>
         </div>
         <div class="form-box-100">
           <h2>输出格式</h2>
-          <mavon-editor placeholder="输出格式" :autofocus="false" v-model="output"></mavon-editor>
+          <markdown-editor placeholder="输出格式" v-model="output"></markdown-editor>
         </div>
         <div class="form-box-100">
           <h2>提示</h2>
-          <mavon-editor placeholder="提示" :autofocus="false" v-model="hint"></mavon-editor>
+          <markdown-editor placeholder="提示" v-model="hint"></markdown-editor>
         </div>
 
         <div class="form-box-100">
@@ -85,7 +85,7 @@
             :sub-title="'该题目的编号为：'+newProblemId+'，你可为其上传完整数据或查看该题目'"
         >
           <template #extra>
-            <a-button type="primary" @click="$router.push({name:'data',query:{problemId: newProblemId}})">
+            <a-button type="primary" @click="$router.push({name:'admin_problem_data',query:{problemId: newProblemId}})">
               上传数据
             </a-button>
             <a-button @click="$router.push({path:`/problem/${newProblemId}/description`})">
@@ -101,12 +101,14 @@
 <script>
 require('codemirror/mode/clike/clike')
 import { codemirror } from 'vue-codemirror-lite'
-import TitleBoxFrame from '../../components/frame/title-box-frame'
+import TitleBoxFrame from '@/components/frame/title-box-frame'
+import MarkdownEditor from '@/components/markdown/markdown-editor'
 export default {
   name: "NewProblem",
   components: {
     codemirror,
-    'title-box-frame': TitleBoxFrame
+    'title-box-frame': TitleBoxFrame,
+    'markdown-editor': MarkdownEditor
   },
   data() {
     return {
@@ -117,7 +119,6 @@ export default {
       hint: '',
       timeLimit: 1000,
       memoryLimit: 256,
-      spj: '',
       samples: [],
       tags: [],
       inputVisible: false,
@@ -201,14 +202,7 @@ export default {
               that.newProblemId = Data.problemId
             } else {
               that.$message.error(data.data.msg)
-              if (data.data.code === 403) {
-                that.$router.replace({
-                  name: 'error',
-                  params: {
-                    code: '403'
-                  }
-                })
-              }
+              that.$store.commit('errorPage', data.data.code)
             }
           })
           .catch(() => {

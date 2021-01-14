@@ -11,20 +11,24 @@
 
         <div v-if="isRoot">
           <div class="add-button">
-            <a-button type="primary" icon="plus" size="large" @click="$router.push({name: 'new_problem'})">新建题目</a-button>
+            <a-button type="primary" icon="plus" size="large" @click="$router.push({name: 'admin_problem_new'})">新建题目</a-button>
           </div>
           <a-table :columns="columns" :data-source="problemList" size="middle" :pagination="false" :loading="loading">
             <span slot="problemId" slot-scope="problemId">
               <b>{{problemId}}</b>
             </span>
             <span slot="problemTitle" slot-scope="record">
-              <router-link :to="{name:'data',query:{problemId:record.problemId}}">{{record.title}}</router-link>
+              <router-link :to="{name:'admin_problem_edit',query:{problemId:record.problemId}}">{{record.title}}</router-link>
             </span>
             <span slot="timeLimit" slot-scope="timeLimit">
               {{timeLimit}}ms
             </span>
             <span slot="memoryLimit" slot-scope="memoryLimit">
               <span :title="memoryLimit+'KB'">{{ (memoryLimit/1024).toFixed(0) }}MB</span>
+            </span>
+            <span slot="testcaseCnt" slot-scope="record">
+              {{record.testcaseCnt}}
+              (<router-link :to="{name:'admin_problem_data',query:{problemId:record.problemId}}" style="text-decoration: underline">edit</router-link>)
             </span>
           </a-table>
           <div class="table-pagination-box">
@@ -73,14 +77,14 @@ const columns = [
   },
   {
     title: '测试点数量',
-    dataIndex: 'testcaseCnt',
     key: 'testcaseCnt',
     width: '100px',
-    align: 'center'
+    align: 'center',
+    scopedSlots: { customRender: 'testcaseCnt' },
   }
 ];
-import TitleBoxFrame from '../../components/frame/title-box-frame'
-import ProblemTestcasesEdit from '../../components/admin/problem-testcases-edit'
+import TitleBoxFrame from '../../../components/frame/title-box-frame'
+import ProblemTestcasesEdit from '../../../components/admin/problem-testcases-edit'
 export default {
   name: "Testcase",
   components: {

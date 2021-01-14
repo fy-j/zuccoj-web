@@ -15,6 +15,36 @@ const routes = [
     component: () => import('../views/Problems')
   },
   {
+    path: '/rank',
+    name: 'rank',
+    component: () => import('../views/Rank')
+  },
+  {
+    path: '/contests',
+    name: 'contests',
+    component: () => import('../views/Contests')
+  },
+  {
+    path: '/gym',
+    name: 'gym',
+    component: () => import('../views/Gym')
+  },
+  {
+    path: '/status',
+    name: 'status',
+    component: () => import('../views/Status')
+  },
+  {
+    path: '/system',
+    name: 'system',
+    component: () => import('../views/System')
+  },
+  {
+    path: '/solution/:solutionId',
+    name: 'solution',
+    component: () => import('../views/solution/Solution')
+  },
+  {
     path: '/problem/:problemId',
     name: 'problem',
     component: () => import('../views/problem/Problem'),
@@ -28,16 +58,6 @@ const routes = [
       path: 'submit',
       component: () => import('../views/problem/Submit')
     }]
-  },
-  {
-    path: '/rank',
-    name: 'rank',
-    component: () => import('../views/Rank')
-  },
-  {
-    path: '/contests',
-    name: 'contests',
-    component: () => import('../views/Contests')
   },
   {
     path: '/contest/:contestId',
@@ -57,41 +77,43 @@ const routes = [
       component: () => import('../components/contest/contest-standings')
     },]
   },
-  {
-    path: '/gym',
-    name: 'gym',
-    component: () => import('../views/Gym')
-  },
-  {
-    path: '/status',
-    name: 'status',
-    component: () => import('../views/Status')
-  },
-  {
-    path: '/system',
-    name: 'system',
-    component: () => import('../views/System')
-  },
-  {
-    path: '/data',
-    name: 'data',
-    component: () => import('../views/admin/Data')
-  },
-  {
-    path: '/newProblem',
-    name: 'new_problem',
-    component: () => import('../views/admin/NewProblem')
-  },
-  {
-    path: '/solution/:solutionId',
-    name: 'solution',
-    component: () => import('../views/solution/Solution')
-  },
+
+
+  /// admin
   {
     path: '/admin',
-    name: 'admin',
-    component: () => import('../views/Admin')
+    component: () => import('../views/EmptyView'),
+    children: [
+      {
+        path: "",
+        name: 'admin',
+        component: () => import('../views/Admin')
+      },
+      {
+        path: "problem",
+        component: () => import('../views/EmptyView'),
+        children: [
+          {
+            path: 'new',
+            name: 'admin_problem_new',
+            component: () => import('../views/admin/problem/NewProblem')
+          },
+          {
+            path: 'edit',
+            name: 'admin_problem_edit',
+            component: () => import('../views/admin/problem/EditProblem')
+          },
+          {
+            path: 'data',
+            name: 'admin_problem_data',
+            component: () => import('../views/admin/problem/Data')
+          }
+        ]
+      },
+    ]
   },
+
+  /// error
   {
     path: '/error/:code',
     name: 'error',

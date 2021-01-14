@@ -11,7 +11,7 @@
         <div class="foot-content-box">
           <b class="foot-title">管理</b>
           <router-link class="foot-item" :to="{path:'/system'}">系统状态</router-link>
-          <router-link class="foot-item" :to="{path:'/data'}">数据管理</router-link>
+          <router-link class="foot-item" :to="{name:'admin_problem_data'}">数据管理</router-link>
           <router-link class="foot-item" :to="{path:'/admin'}">管理后台</router-link>
         </div>
 

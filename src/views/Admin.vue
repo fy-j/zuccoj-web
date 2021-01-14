@@ -2,8 +2,7 @@
   <title-box-frame title="管理后台">
     <template v-slot:content>
         <a-card v-for="(item, index) in adminGroup" :key="item.title+index" style="margin-bottom: 16px">
-  <!--        <div v-if="index" style="margin-top: 90px"/>-->
-          <a-card-grid v-for="(entrance, _index) in item.entrances" :key="entrance.name+_index" class="grid-button">
+          <a-card-grid v-for="(entrance, _index) in item.entrances" :key="entrance.name+_index" class="grid-button" @click="gotoPath(entrance.path)">
               <a-space align="center">
                 <a-icon :type="entrance.icon" style="font-size: 32px"/>
                 <span style="font-size: 18px">{{entrance.name }}</span>
@@ -41,7 +40,7 @@ export default {
           entrances: [{
             icon: 'user',
             path: '',
-            name: '用户列表'
+            name: '用户管理'
           },{
             icon: 'key',
             path: '',
@@ -52,8 +51,62 @@ export default {
             name: '用户权限'
           },]
         },
+        {
+          title: '题目设置',
+          entrances: [{
+            icon: 'read',
+            path: 'admin_problem_data',
+            name: '题目管理'
+          },{
+            icon: 'plus',
+            path: 'admin_problem_new',
+            name: '新建题目'
+          },]
+        },
+        {
+          title: '比赛设置',
+          entrances: [{
+            icon: 'flag',
+            path: '',
+            name: '比赛管理'
+          },{
+            icon: 'plus-circle',
+            path: '',
+            name: '新建比赛'
+          },]
+        },
+        {
+          title: '题集设置',
+          entrances: [{
+            icon: 'tags',
+            path: '',
+            name: '题集管理'
+          },{
+            icon: 'plus-square',
+            path: '',
+            name: '新建题集'
+          },]
+        },
       ]
     }
+  },
+  methods: {
+    gotoPath(path) {
+      console.log(path)
+      if (path.startsWith('/')) {
+        this.$router.push({
+          path: path
+        })
+      } else {
+        console.log(path)
+        this.$router.push({
+          name: path
+        })
+      }
+    }
+  },
+  created() {
+    this.$store.commit('permissionCheck', this.$store.state.PermissionLevel.ADMIN)
   }
 }
 </script>
