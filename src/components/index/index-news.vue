@@ -1,9 +1,13 @@
 <template>
   <title-box-frame title="公告板">
     <template v-slot:content>
-      <template v-for="(content,index) in contents">
-        <markdown-display :content="content" :key="'content'+index"></markdown-display>
+      <loading-box-frame v-if="loading"></loading-box-frame>
+      <template v-else-if="allNews.length > 0">
+        <template v-for="(news,index) in allNews">
+          <markdown-display :content="'## '+news.title+'\n\n'+news.content" :key="'content'+index"></markdown-display>
+        </template>
       </template>
+      <a-empty v-else description="暂无公告" style="margin: 40px 0"></a-empty>
     </template>
   </title-box-frame>
 </template>
@@ -11,25 +15,42 @@
 <script>
 import TitleBoxFrame from '@/components/frame/title-box-frame'
 import MarkdownDisplay from '@/components/markdown/markdown-display'
+import LoadingBoxFrame from '@/components/frame/loading-box-frame'
 export default {
   name: "index-news",
   components: {
     'title-box-frame': TitleBoxFrame,
-    'markdown-display': MarkdownDisplay
+    'markdown-display': MarkdownDisplay,
+    'loading-box-frame': LoadingBoxFrame
   },
   data() {
     return {
-      contents: [
-          '## ZUCC Online Judge &beta; Released! :star2:\n\n' +
-          'ZUCC在线评测系统&beta;正式发布！\n\n' +
-          '新版本从底层实现到整体架构到前端页面都进行了全新的设计，力求给大家一个更好的刷题/训练环境。\n\n' +
-          '目前系统支持`C`、`C++`和`Java`三种语言代码的提交和评测，详细的编译和运行命令请查看页脚中的 ***常见问题*** ，其它语言将在后续逐步支持。\n\n' +
-          '在使用过程中遇到的问题，可以在页脚的 ***意见反馈*** 中告诉我们，也可以[邮件联系管理员](mailto:31701030@stu.zucc.edu.cn)。\n\n' +
-          'Enjoy It ! :grin:',
-          '## 关于ZUCC Online Judge账号规范 :exclamation:\n\n' +
-          '校内同学请使用学号作为username，使用真实姓名作为nickname，否则成绩将不被接受！'
-      ]
+      loading: false,
+      allNews: []
     }
+  },
+  methods: {
+    getData() {
+      let that = this
+      that.loading = true
+      that.$http.get(that.$store.state.host + '/news/display')
+          .then(data => {
+            if (data.data.code === 200) {
+              that.allNews = data.data.data
+            } else {
+              that.$message.error(data.data.msg)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.loading = false
+          })
+    }
+  },
+  created() {
+    this.getData()
   }
 }
 </script>

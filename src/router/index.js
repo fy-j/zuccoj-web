@@ -110,6 +110,28 @@ const routes = [
           }
         ]
       },
+      {
+        path: "news",
+        name: 'admin_news',
+        component: () => import('../views/admin/home/News'),
+        // children: [
+        //   {
+        //     path: 'new',
+        //     name: 'admin_problem_new',
+        //     component: () => import('../views/admin/problem/NewProblem')
+        //   },
+        //   {
+        //     path: 'edit',
+        //     name: 'admin_problem_edit',
+        //     component: () => import('../views/admin/problem/EditProblem')
+        //   },
+        //   {
+        //     path: 'data',
+        //     name: 'admin_problem_data',
+        //     component: () => import('../views/admin/problem/Data')
+        //   }
+        // ]
+      },
     ]
   },
 

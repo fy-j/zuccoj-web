@@ -31,7 +31,7 @@ export default {
             name: '首页图片'
           },{
             icon: 'sound',
-            path: '',
+            path: 'admin_news',
             name: '公告板设置'
           },]
         },

@@ -1,9 +1,7 @@
 <template>
-  <title-box-frame title="新建题目">
+  <title-box-frame title="编辑题目">
     <template v-slot:content>
-      <loading-box-frame v-if="loading">
-
-      </loading-box-frame>
+      <loading-box-frame v-if="loading"></loading-box-frame>
       <template v-else>
         <div class="new-form" v-if="!newSuccess">
           <div class="form-box-50">
@@ -211,7 +209,7 @@ export default {
       that.$http.post(that.$store.state.host + '/problem/update', sendData)
           .then(data => {
             if (data.data.code === 200) {
-              that.$message.success('更新成功')
+              that.$message.success(data.data.msg)
               that.newSuccess = true
             } else {
               that.$message.error(data.data.msg)
