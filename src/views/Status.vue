@@ -2,13 +2,14 @@
   <div>
     <base-box-frame>
       <template v-slot:content>
-        <status-solution-search class="table-pagination-box"></status-solution-search>
-        <status-table :status-data="statusData"></status-table>
+        <status-solution-search class="table-pagination-box" @search="queryStatus"></status-solution-search>
+        <loading-box-frame v-if="loading"></loading-box-frame>
+        <status-table v-else :status-data="statusData"></status-table>
         <div class="table-pagination-box">
           <a-button-group>
             <a-button @click="gotoPage(1)"><a-icon type="double-left"/>首页</a-button>
-            <a-button @click="gotoPage(2)"><a-icon type="left" />上一页</a-button>
-            <a-button @click="gotoPage(3)"><a-icon type="right" />下一页</a-button>
+            <a-button @click="gotoPage(2)" :disabled="!$route.query.offset"><a-icon type="left"/>上一页</a-button>
+            <a-button @click="gotoPage(3)" :disabled="!statusData || statusData.length === 0"><a-icon type="right" />下一页</a-button>
           </a-button-group>
         </div>
       </template>
@@ -21,17 +22,20 @@ const pageSize = 20
 import StatusTable from '@/components/status/status-table'
 import BaseBoxFrame from '@/components/frame/base-box-frame'
 import StatusSolutionSearch from '@/components/status/status-solution-search'
+import LoadingBoxFrame from '@/components/frame/loading-box-frame'
 export default {
   name: "Status",
   components: {
     'status-table': StatusTable,
     'base-box-frame': BaseBoxFrame,
-    'status-solution-search': StatusSolutionSearch
+    'status-solution-search': StatusSolutionSearch,
+    'loading-box-frame': LoadingBoxFrame
   },
   data() {
     return {
       pageSize,
-      statusData: []
+      statusData: [],
+      loading: false
     }
   },
   methods: {
@@ -39,8 +43,12 @@ export default {
       let that = this
       let offset = that.$route.query.offset ? that.$route.query.offset : 0
       let size = that.pageSize
+      let problemId = this.$route.query.problemId
+      let username = this.$route.query.username
+      let lang = this.$route.query.lang
+      let result = this.$route.query.result
       that.loading = true
-      that.$http.get(that.$store.state.host + '/solution/status?offset='+offset+(size?`&size=${size}`:''))
+      that.$http.get(that.$store.state.host + '/solution/status?contestId=0&offset='+offset+(size?`&size=${size}`:'')+(problemId?`&problemId=${problemId}`:'')+(username?`&username=${username}`:'')+(lang?`&lang=${lang}`:'')+(result?`&result=${result}`:''))
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data
@@ -68,11 +76,14 @@ export default {
       if (offset < 0) {
         offset = 0;
       }
+      let query = JSON.parse(JSON.stringify(this.$route.query))
+      query['offset'] = offset
+      this.queryStatus(query)
+    },
+    queryStatus(query) {
       this.$router.push({
         name: 'status',
-        query: {
-          offset: offset
-        }
+        query: query
       })
     }
   },

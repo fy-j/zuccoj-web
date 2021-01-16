@@ -92,13 +92,11 @@ export default {
   },
   methods: {
     gotoPath(path) {
-      console.log(path)
       if (path.startsWith('/')) {
         this.$router.push({
           path: path
         })
       } else {
-        console.log(path)
         this.$router.push({
           name: path
         })

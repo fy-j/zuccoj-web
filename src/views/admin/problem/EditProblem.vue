@@ -203,7 +203,6 @@ export default {
       if (that.isSpj) {
         sendData.append('spj', that.spjCode)
       }
-      sendData.append('visible', false)
       sendData.append('samples', JSON.stringify(that.samples))
       sendData.append('tags', JSON.stringify(that.tags))
       that.$http.post(that.$store.state.host + '/problem/update', sendData)

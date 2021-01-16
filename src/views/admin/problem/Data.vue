@@ -30,6 +30,12 @@
               {{record.testcaseCnt}}
               (<router-link :to="{name:'admin_problem_data',query:{problemId:record.problemId}}" style="text-decoration: underline">edit</router-link>)
             </span>
+            <span slot="visible" slot-scope="record">
+              <a-switch v-model="record.visible" @change="updateVisible(record.problemId, record.visible)" title="普通用户是否可见">
+                <a-icon slot="checkedChildren" type="check" />
+                <a-icon slot="unCheckedChildren" type="close" />
+              </a-switch>
+            </span>
           </a-table>
           <div class="table-pagination-box">
             <a-pagination :current="currentPage" :total="pageCount" :pageSize="pageSize" @change="getProblemList"/>
@@ -81,7 +87,14 @@ const columns = [
     width: '100px',
     align: 'center',
     scopedSlots: { customRender: 'testcaseCnt' },
-  }
+  },
+  {
+    title: '启用',
+    key: 'visible',
+    scopedSlots: { customRender: 'visible' },
+    align: 'center',
+    width: '100px',
+  },
 ];
 import TitleBoxFrame from '../../../components/frame/title-box-frame'
 import ProblemTestcasesEdit from '../../../components/admin/problem-testcases-edit'
@@ -144,6 +157,26 @@ export default {
       } else {
         this.getTestcase()
       }
+    },
+    updateVisible(problemId, visible) {
+      let that = this
+      let sendData = new FormData()
+      sendData.append('problemId', problemId)
+      sendData.append('visible', visible)
+      let key = 'updating-key'
+      that.$message.loading({ content: '提交中...', key });
+      that.$http.post(that.$store.state.host + '/problem/visible', sendData)
+          .then(data => {
+            if (data.data.code === 200) {
+              that.$message.success({ content: data.data.msg, key });
+            } else {
+              that.$message.error({ content: data.data.msg, key })
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error({ content: '系统错误', key })
+          })
     }
   },
   created() {
