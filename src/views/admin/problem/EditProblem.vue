@@ -235,7 +235,6 @@ export default {
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data
-              console.log(Data)
               that.problemId = Data.problemId
               that.title = Data.title
               that.description = Data.description

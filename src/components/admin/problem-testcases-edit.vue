@@ -28,7 +28,7 @@
     <div>
       <input type="file" id="file1" style="display: none" accept=".in,.txt" @change="inputFileSelect">
       <input type="file" id="file2" style="display: none" accept=".out,.ans,.txt" @change="outputFileSelect">
-      <input type="file" id="file3" style="display: none" a  ccept=".zip" @change="zipFileSelect">
+      <input type="file" id="file3" style="display: none" accept=".zip" @change="zipFileSelect">
       <a-space :size="20" align="start">
         <a-space :size="10" direction="vertical">
           <h2>新增单个测试点</h2>
@@ -61,7 +61,7 @@
               </a-button>
             </a-input-search>
           </div>
-          <a-button type="primary" style="width: 100%">上传</a-button>
+          <a-button type="primary" style="width: 100%" @click="uploadZipTestcase" :loading="zipUploading">上传</a-button>
         </a-space>
       </a-space>
     </div>
@@ -116,7 +116,7 @@ import FileSize from '../../components/number/file-size'
 export default {
   name: "problem-testcases-edit",
   props: {
-    problemId: String
+    problemId: String,Number
   },
   components: {
     'file-size': FileSize
@@ -132,7 +132,8 @@ export default {
       inputName: '',
       outputName: '',
       zipName: '',
-      oneUpdating: false
+      oneUpdating: false,
+      zipUploading: false
     }
   },
   methods: {
@@ -191,7 +192,7 @@ export default {
       sendData.append('problemId', that.problemId)
       sendData.append('inputFile', that.inputFile)
       sendData.append('outputFile', that.outputFile)
-      that.$http.post(that.$store.state.host + '/testcase/newOne', sendData)
+      that.$http.post(that.$store.state.host + '/testcase/upload', sendData)
           .then(data => {
             if (data.data.code === 200) {
               that.$message.success(data.data.msg)
@@ -217,6 +218,54 @@ export default {
           })
           .finally(() => {
             that.oneUpdating = false
+          })
+    },
+    uploadZipTestcase() {
+      let that = this
+
+      if (!that.zipFile) {
+        that.$message.error('请选择文件')
+        return
+      }
+
+      that.zipUploading = true
+      let sendData = new FormData()
+      sendData.append('problemId', that.problemId)
+      sendData.append('zip', that.zipFile)
+      that.$http.post(that.$store.state.host + '/testcase/uploadZip', sendData)
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data;
+              const h = that.$createElement;
+              let p = []
+              Data.forEach(log => p.push(h('p',log)))
+              p.push(h('br'))
+              p.push(h('p', `共添加 ${Data.length} 个测时点`))
+              that.$info({
+                title: '压缩包添加情况',
+                content: h('div', {}, p),
+                onOk() {},
+              });
+              that.getData()
+              that.zipFile = null
+              that.zipName = ''
+            } else {
+              that.$message.error(data.data.msg)
+              if (data.data.code === 403) {
+                that.$router.replace({
+                  name: 'error',
+                  params: {
+                    code: '403'
+                  }
+                })
+              }
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.zipUploading = false
           })
     },
     delOneTestcase(testcaseId) {

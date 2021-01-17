@@ -5,7 +5,7 @@
         <a-breadcrumb style="margin-top: 15px">
           <a-breadcrumb-item><span></span></a-breadcrumb-item>
           <a-breadcrumb-item><router-link :to="{name:'home'}">首页</router-link></a-breadcrumb-item>
-          <a-breadcrumb-item><router-link :to="{name:'data'}">所有题目</router-link></a-breadcrumb-item>
+          <a-breadcrumb-item><router-link :to="{name:'admin_problem_data'}">所有题目</router-link></a-breadcrumb-item>
           <a-breadcrumb-item v-if="!isRoot"><span>{{problemId}}</span></a-breadcrumb-item>
         </a-breadcrumb>
 
