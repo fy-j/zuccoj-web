@@ -75,6 +75,7 @@ export default new Vuex.Store({
           if (data.data.code === 200) {
             that.$message.success(data.data.msg)
             state.user = null
+            router.replace({name:'refresh'})
           } else {
             that.$message.error(data.data.msg)
           }

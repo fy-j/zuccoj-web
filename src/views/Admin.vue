@@ -26,10 +26,10 @@ export default {
         {
           title: '首页设置',
           entrances: [{
-            icon: 'picture',
-            path: '',
-            name: '首页图片'
-          },{
+          //   icon: 'picture',
+          //   path: '',
+          //   name: '首页图片'
+          // },{
             icon: 'sound',
             path: 'admin_news',
             name: '公告板设置'

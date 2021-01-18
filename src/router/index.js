@@ -142,6 +142,11 @@ const routes = [
     component: () => import('../views/error/Error')
   },
   {
+    path: '/refresh',
+    name: 'refresh',
+    component: () => import('../views/Refresh')
+  },
+  {
     path: '*',
     redirect: '/error/404'
   }

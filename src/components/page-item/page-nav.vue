@@ -181,6 +181,7 @@
               username: '',
               password: ''
             }
+            that.$router.replace({name:'refresh'})
           } else {
             that.$message.error(data.data.msg)
           }
