@@ -71,7 +71,7 @@ export default {
             name: '比赛管理'
           },{
             icon: 'plus-circle',
-            path: '',
+            path: 'admin_contest_new',
             name: '新建比赛'
           },]
         },

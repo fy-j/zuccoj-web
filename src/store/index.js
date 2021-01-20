@@ -16,9 +16,21 @@ const PermissionLevel = {
   ADMIN: 999
 }
 
+const ContentTypeText = [
+  'UNKNOWN',
+  'ACM/ICPC',
+  'OI',
+  'IOI',
+  'Codeforces'
+]
+
+const ContestProblemLabel = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
 export default new Vuex.Store({
   state: {
     PermissionLevel,
+    ContentTypeText,
+    ContestProblemLabel,
     host: host,
     file_host: file_host,
     current_page: [],
