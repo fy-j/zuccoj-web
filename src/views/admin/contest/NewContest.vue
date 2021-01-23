@@ -64,7 +64,7 @@
             <a-button title="确认" icon="check" @click="problemMovable = false" v-else/>
           </a-space>
         </a-form-model-item>
-        <a-button type="primary" block @click="submitCheck">
+        <a-button type="primary" block @click="submitCheck" :loading="submitting">
           提交
         </a-button>
       </a-form-model>
@@ -79,7 +79,6 @@ import draggable from 'vuedraggable'
 export default {
   name: "NewContest",
   components: {
-    // eslint-disable-next-line vue/no-unused-components
     draggable,
     'title-box-frame': TitleBoxFrame,
   },
@@ -120,10 +119,12 @@ export default {
           { validator: this.problemListCheck, trigger: 'change' }
         ]
       },
+      submitting: false,
     }
   },
   computed: {
     ...mapState([
+        'host',
         'ContentTypeText',
         'ContestProblemLabel'
     ])
@@ -185,12 +186,49 @@ export default {
     },
     submitCheck() {
       let that = this
-      that.$message.warning('submitting')
       that.$refs["contestForm"].validate(valid => {
         if (valid) {
-          that.$message.success('submit!')
+          that.newContestSubmit()
         }
       })
+    },
+    newContestSubmit() {
+      let that = this
+      let sendData = new FormData()
+      sendData.append('contestName', that.contestData.contestName)
+      sendData.append('beginTime', that.contestData.beginTime)
+      sendData.append('endTime', that.contestData.endTime)
+      if (that.contestData.freezeTime) {
+        sendData.append('freezeTime', that.contestData.freezeTime)
+      }
+      if (that.contestData.unfreezeTime) {
+        sendData.append('unfreezeTime', that.contestData.unfreezeTime)
+      }
+      sendData.append('isPublic', that.contestData.isPublic)
+      if (!that.contestData.isPublic) {
+        sendData.append('password', that.contestData.password)
+      }
+      sendData.append('contestType', that.contestData.contestType)
+      let problemList = []
+      that.contestData.problems.forEach( o => problemList.push(o.problemId))
+      sendData.append('problems', JSON.stringify(problemList))
+      that.submitting = true
+      that.$http.post(that.host + '/contest/new', sendData)
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              that.$message.success('添加成功, contestId=' + Data)
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.submitting = false
+          })
     }
   }
 }
