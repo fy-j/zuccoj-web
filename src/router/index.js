@@ -129,11 +129,11 @@ const routes = [
           //   name: 'admin_problem_edit',
           //   component: () => import('../views/admin/problem/EditProblem')
           // },
-          // {
-          //   path: 'data',
-          //   name: 'admin_problem_data',
-          //   component: () => import('../views/admin/problem/Data')
-          // }
+          {
+            path: 'data',
+            name: 'admin_contest_data',
+            component: () => import('../views/admin/contest/Data')
+          }
         ]
       },
     ]

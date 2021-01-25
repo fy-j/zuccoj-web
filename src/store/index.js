@@ -35,6 +35,19 @@ export default new Vuex.Store({
     file_host: file_host,
     current_page: [],
     user: null,
+    buildGetQuery: function (data) {
+      let res = ''
+      for (let item in data) {
+        if (res) {
+          res += '&'
+        }
+        res += `${item}=${encodeURIComponent(data[item])}`
+      }
+      if (res) {
+        res = '?' + res
+      }
+      return res
+    },
     fixZero: function (x) {
       if (x<10) return '0'+x
       return ''+x
@@ -100,17 +113,28 @@ export default new Vuex.Store({
     },
     permissionCheck(state, level) {
       let that = this._vm
-      that.$http.get(state.host + '/user/check?level='+level)
-        .then(data => {
-          if (data.data.code === 403) {
-            router.replace({
-              name: 'error',
-              params: {
-                code: String(403)
-              }
-            })
-          }
-        })
+      if (state.user) {
+        if (state.user.status < level) {
+          router.replace({
+            name: 'error',
+            params: {
+              code: String(403)
+            }
+          })
+        }
+      } else {
+        that.$http.get(state.host + '/user/check?level='+level)
+          .then(data => {
+            if (data.data.code === 403) {
+              router.replace({
+                name: 'error',
+                params: {
+                  code: String(403)
+                }
+              })
+            }
+          })
+      }
     },
     errorPage(state, code) {
       if ([403, 404, 500, '403', '404', '500'].indexOf(code) !== -1) {

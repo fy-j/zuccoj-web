@@ -96,8 +96,8 @@ const columns = [
     width: '100px',
   },
 ];
-import TitleBoxFrame from '../../../components/frame/title-box-frame'
-import ProblemTestcasesEdit from '../../../components/admin/problem-testcases-edit'
+import TitleBoxFrame from '@/components/frame/title-box-frame'
+import ProblemTestcasesEdit from '@/components/admin/problem-testcases-edit'
 export default {
   name: "Testcase",
   components: {

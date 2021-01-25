@@ -67,7 +67,7 @@ export default {
           title: '比赛设置',
           entrances: [{
             icon: 'flag',
-            path: '',
+            path: 'admin_contest_data',
             name: '比赛管理'
           },{
             icon: 'plus-circle',

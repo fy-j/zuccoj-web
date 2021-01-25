@@ -230,6 +230,9 @@ export default {
             that.submitting = false
           })
     }
+  },
+  created() {
+    // TODO: check user permission
   }
 }
 </script>
