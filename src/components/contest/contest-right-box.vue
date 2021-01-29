@@ -17,8 +17,16 @@
       </div>
       <a-divider />
       <div style="padding: 0 30px">
-        <a-progress :percent="((new Date())-contestInfo.beginTime)/(contestInfo.endTime-contestInfo.beginTime)*100" status="active" :strokeWidth="30" :showInfo="false"/>
-        <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime.valueOf()"></a-statistic-countdown>
+        <a-progress :percent="progressing" :status="(contestStatus>0)?('success'):('active')" :strokeWidth="30" :showInfo="false"/>
+        <template v-if="contestStatus < 0">
+          <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime" @finish="remind('比赛已经开始啦！页面即将刷新', true)" title="距离比赛开始还有"></a-statistic-countdown>
+        </template>
+        <template v-else-if="contestStatus > 0">
+          <div style="width: 100%; text-align: center; height: 40px;line-height: 40px;font-size: 16px;color: black">比赛已结束</div>
+        </template>
+        <template v-else>
+          <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime" @finish="remind('比赛已经结束啦！页面即将刷新', true)" title="距离比赛结束还有"></a-statistic-countdown>
+        </template>
       </div>
       <a-divider />
       <div style="margin-bottom: 24px">
@@ -28,11 +36,15 @@
         </div>
         <div class="description-item-box">
           <span class="description-item-title">比赛状态</span>
-          <span class="description-item-content"><a-badge status="processing" />进行中</span>
+          <span class="description-item-content">
+            <span v-if="contestInfo.beginTime > $moment()"><a-badge status="success" />未开始</span>
+            <span v-else-if="contestInfo.endTime < $moment()"><a-badge status="default" />已结束</span>
+            <span v-else><a-badge status="processing" />进行中</span>
+          </span>
         </div>
         <div class="description-item-box">
           <span class="description-item-title">比赛规则</span>
-          <span class="description-item-content">{{ contestInfo.rule }}</span>
+          <span class="description-item-content">{{ ContentTypeText[contestInfo.contestType] }}</span>
         </div>
         <div class="description-item-box">
           <span class="description-item-title">题目数量</span>
@@ -40,15 +52,15 @@
         </div>
         <div class="description-item-box">
           <span class="description-item-title">开始时间</span>
-          <span class="description-item-content">{{ $store.state.dateFormat(contestInfo.beginTime) }}</span>
+          <span class="description-item-content">{{ contestInfo.beginTime.format("YYYY-MM-DD HH:mm") }}</span>
         </div>
         <div class="description-item-box">
           <span class="description-item-title">结束时间</span>
-          <span class="description-item-content">{{ $store.state.dateFormat(contestInfo.endTime) }}</span>
+          <span class="description-item-content">{{ contestInfo.endTime.format("YYYY-MM-DD HH:mm") }}</span>
         </div>
         <div class="description-item-box">
           <span class="description-item-title">参与人数</span>
-          <span class="description-item-content">{{ contestInfo.memberNum }}</span>
+          <span class="description-item-content">{{ contestInfo.memberCount }}</span>
         </div>
       </div>
     </template>
@@ -57,6 +69,7 @@
 
 <script>
 import BaseBoxFrame from '@/components/frame/base-box-frame'
+import {mapState} from "vuex";
 export default {
   name: "contest-right-box",
   components: {
@@ -65,6 +78,52 @@ export default {
   props: {
     contestInfo: Object
   },
+  data() {
+    return {
+      progressing: 0,
+      contestStatus: 0, // -1: before; 0: running; 1: end
+      nowTime: this.$moment()
+    }
+  },
+  computed: {
+    ...mapState(['ContentTypeText'])
+  },
+  methods: {
+    progressClock() {
+      let that = this
+      that.nowTime = this.$moment()
+      if (that.nowTime > that.contestInfo.endTime) {
+        that.contestStatus = 1
+        that.progressing = 100
+        return
+      } else if (that.nowTime < that.contestInfo.beginTime) {
+        that.contestStatus = -1
+        that.progressing = 0
+      } else {
+        that.contestStatus = 0
+        let now = that.nowTime.unix()
+        let begin = that.contestInfo.beginTime.unix()
+        let end = that.contestInfo.endTime.unix()
+        that.progressing =  (now - begin) / (end - begin) * 100;
+      }
+      setTimeout(()=>{
+        that.progressClock()
+      }, 1000)
+    },
+    remind(msg ,re) {
+      this.$notification.open({
+        message: '提醒',
+        description: msg,
+        icon: <a-icon type="smile" style="color: #108ee9" />,
+      })
+      if (re) {
+        this.$router.push({name: 'refresh'})
+      }
+    }
+  },
+  created() {
+    this.progressClock()
+  }
 }
 </script>
 
