@@ -9,7 +9,7 @@
           <b>{{contestId}}</b>
         </span>
         <span slot="contestName" slot-scope="contestName, contest">
-          <a :href="'#/contest/'+contest.contestId+'/problems'">{{contestName}}</a>
+          <router-link :to="{name: 'admin_contest_edit', query: {contestId: contest.contestId}}">{{contestName}}</router-link>
         </span>
         <span slot="contestTime" slot-scope="contest">
           <span v-if="contest.beginTime">
@@ -26,12 +26,23 @@
           {{isPublic?'公开':'私有'}}
         </span>
         <span slot="memberCount" slot-scope="memberCount, contest">
-          <a :href="'#/contest/'+contest.contestId+'/standings'"><a-icon type="user"/> {{memberCount}}</a>
+          <a-button type="link" size="small" @click="getContestMember(contest.contestId)"><a-icon type="user"/> {{memberCount}}</a-button>
         </span>
       </a-table>
       <div class="table-pagination-box">
         <a-pagination :current="currentPage" :total="pageCount" :pageSize="pageSize" @change="pageChange"/>
       </div>
+      <a-modal
+          v-model="memberVisible"
+          title="参赛者"
+          centered
+          ok-text="确认"
+          cancel-text="取消"
+          @ok="memberVisible = false"
+      >
+        <a-table :columns="memberColumns" :data-source="memberData" size="small" :pagination="true" :loading="memberLoading">
+        </a-table>
+      </a-modal>
     </template>
   </title-box-frame>
 </template>
@@ -89,6 +100,22 @@ const columns = [
     align: 'center'
   },
 ];
+const memberColumns = [
+  {
+    title: 'username',
+    dataIndex: 'username',
+    key: 'username',
+    scopedSlots: { customRender: 'username' },
+    align: 'center'
+  },
+  {
+    title: 'nickname',
+    dataIndex: 'nickname',
+    key: 'nickname',
+    scopedSlots: { customRender: 'nickname' },
+    align: 'center'
+  },
+];
 import TitleBoxFrame from '@/components/frame/title-box-frame'
 import {mapState} from "vuex";
 export default {
@@ -100,10 +127,14 @@ export default {
     return {
       pageSize,
       columns,
+      memberColumns,
       allData: [],
       pageCount: 0,
       currentPage: 1,
-      loading: false
+      loading: false,
+      memberVisible: false,
+      memberData: [],
+      memberLoading: false
     }
   },
   computed: {
@@ -145,6 +176,26 @@ export default {
           page: page
         }
       })
+    },
+    getContestMember(contestId) {
+      let that = this
+      that.memberLoading = true
+      that.$http.get(that.host + '/contest/member' + that.buildGetQuery({contestId: contestId}))
+          .then(data => {
+            if (data.data.code === 200) {
+              that.memberData = data.data.data
+              that.memberVisible = true
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.memberLoading = false
+          })
     }
   },
   created() {

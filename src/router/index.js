@@ -65,15 +65,19 @@ const routes = [
     component: () => import('../views/contest/Contest'),
     children: [{
       path: 'problems',
+      name: 'contest_problems',
       component: () => import('../views/contest/Problems')
     },{
       path: 'status',
+      name: 'contest_status',
       component: () => import('../views/Status')
     },{
       path: 'my',
+      name: 'contest_my',
       component: () => import('../components/contest/contest-my-submit')
     },{
       path: 'standings',
+      name: 'contest_standings',
       component: () => import('../components/contest/contest-standings')
     },]
   },
@@ -124,11 +128,11 @@ const routes = [
             name: 'admin_contest_new',
             component: () => import('../views/admin/contest/NewContest')
           },
-          // {
-          //   path: 'edit',
-          //   name: 'admin_problem_edit',
-          //   component: () => import('../views/admin/problem/EditProblem')
-          // },
+          {
+            path: 'edit',
+            name: 'admin_contest_edit',
+            component: () => import('../views/admin/contest/EditContest')
+          },
           {
             path: 'data',
             name: 'admin_contest_data',

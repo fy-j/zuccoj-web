@@ -1,7 +1,11 @@
 <template>
-  <title-box-frame title="新建比赛">
+  <title-box-frame title="编辑比赛">
     <template v-slot:content>
-      <a-form-model :rules="contestRules" :model="contestData" ref="contestForm" :label-col="{span:2}" :wrapper-col="{span:22}">
+      <loading-box-frame v-if="loading"></loading-box-frame>
+      <a-form-model v-else :rules="contestRules" :model="contestData" ref="contestForm" :label-col="{span:2}" :wrapper-col="{span:22}">
+        <a-form-model-item label="比赛编号 ">
+          <b>{{contestData.contestId}}</b>
+        </a-form-model-item>
         <a-form-model-item prop="contestName" label="比赛名称 ">
           <a-input v-model="contestData.contestName" placeholder="比赛名称"></a-input>
         </a-form-model-item>
@@ -36,7 +40,7 @@
           <draggable v-model="contestData.problems" :disabled="!problemMovable">
             <transition-group>
               <template v-for="(problem, index) in contestData.problems">
-                <div class="ant-list-bordered contest-problem-list-item" :key="problem.title + index">
+                <div class="ant-list-bordered contest-problem-list-item" :key="'problem' + index">
                   <span class="contest-problem-list-item-label">
                     <b>{{ ContestProblemLabel[index] }}</b>
                   </span>
@@ -65,7 +69,7 @@
           </a-space>
         </a-form-model-item>
         <a-button type="primary" block @click="submitCheck" :loading="submitting">
-          提交
+          更新
         </a-button>
       </a-form-model>
     </template>
@@ -76,14 +80,17 @@
 import { mapState } from 'vuex'
 import TitleBoxFrame from '@/components/frame/title-box-frame'
 import draggable from 'vuedraggable'
+import LoadingBoxFrame from '@/components/frame/loading-box-frame'
 export default {
   name: "NewContest",
   components: {
     draggable,
     'title-box-frame': TitleBoxFrame,
+    'loading-box-frame': LoadingBoxFrame
   },
   data() {
     return {
+      loading: false,
       problemMovable: false,
       contestData: {
         contestId: null,
@@ -126,7 +133,8 @@ export default {
     ...mapState([
         'host',
         'ContentTypeText',
-        'ContestProblemLabel'
+        'ContestProblemLabel',
+        'buildGetQuery'
     ])
   },
   methods: {
@@ -188,13 +196,14 @@ export default {
       let that = this
       that.$refs["contestForm"].validate(valid => {
         if (valid) {
-          that.newContestSubmit()
+          that.saveContestSubmit()
         }
       })
     },
-    newContestSubmit() {
+    saveContestSubmit() {
       let that = this
       let sendData = new FormData()
+      sendData.append('contestId', that.contestData.contestId)
       sendData.append('contestName', that.contestData.contestName)
       sendData.append('beginTime', that.contestData.beginTime)
       sendData.append('endTime', that.contestData.endTime)
@@ -213,15 +222,14 @@ export default {
       that.contestData.problems.forEach( o => problemList.push(o.problemId))
       sendData.append('problems', JSON.stringify(problemList))
       that.submitting = true
-      that.$http.post(that.host + '/contest/new', sendData)
+      that.$http.post(that.host + '/contest/update', sendData)
           .then(data => {
             if (data.data.code === 200) {
-              let Data = data.data.data
-              that.$message.success('添加成功, contestId=' + Data)
+              that.$message.success('更新成功')
               that.$router.push({
                 name: 'contest_problems',
                 params: {
-                  contestId: Data
+                  contestId: that.contestData.contestId
                 }
               })
             } else {
@@ -235,10 +243,48 @@ export default {
           .finally(() => {
             that.submitting = false
           })
+    },
+    getContest() {
+      let that = this
+      that.contestData.contestId = that.$route.query.contestId
+      if (!that.contestData.contestId) {
+        that.$store.commit('errorPage', 404)
+        return
+      }
+
+      that.loading = true
+      that.$http.get(that.host + '/contest/get' + that.buildGetQuery({contestId: that.contestData.contestId}))
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              that.contestData = {
+                contestId: Data.contest.contestId,
+                contestName: Data.contest.contestName,
+                beginTime: Data.contest.beginTime,
+                endTime: Data.contest.endTime,
+                freezeTime: Data.contest.freezeTime,
+                unfreezeTime: Data.contest.unfreezeTime,
+                isPublic: Data.contest.public,
+                password: Data.contest.password,
+                contestType: Data.contest.contestType,
+                problems: Data.problems
+              }
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.loading = false
+          })
     }
   },
   created() {
     // TODO: check user permission
+    this.getContest()
   }
 }
 </script>
