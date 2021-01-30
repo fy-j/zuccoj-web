@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <loading-box-frame v-if="loading"></loading-box-frame>
+  <div v-else>
     <div class="contest-title">
       {{contestInfo.contestName}} <span style="cursor: pointer" @click="()=>{rightBoxShow=!rightBoxShow}"><a-icon :type="rightBoxShow?'arrows-alt':'shrink'" /></span>
     </div>
-    <a-row :gutter="16" v-if="!loading">
+    <a-row :gutter="16">
       <a-col class="gutter-row" :span="rightBoxShow?18:24">
         <router-view />
       </a-col>
@@ -39,10 +40,12 @@
 <script>
 import ContestRightBox from '@/components/contest/contest-right-box'
 import {mapState} from "vuex";
+import LoadingBoxFrame from '@/components/frame/loading-box-frame'
 export default {
   name: "Contest",
   components: {
-    'contest-right-box': ContestRightBox
+    'contest-right-box': ContestRightBox,
+    'loading-box-frame': LoadingBoxFrame
   },
   data() {
     return {

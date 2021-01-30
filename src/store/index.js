@@ -35,6 +35,15 @@ export default new Vuex.Store({
     file_host: file_host,
     current_page: [],
     user: null,
+    getContestProblemLabel: function(id, a, sum) {
+      if (!a) {
+        return id
+      }
+      if (sum > ContestProblemLabel.length) {
+        return id
+      }
+      return ContestProblemLabel[id]
+    },
     buildGetQuery: function (data) {
       let res = ''
       for (let item in data) {

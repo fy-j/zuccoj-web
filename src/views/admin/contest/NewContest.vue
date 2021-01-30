@@ -38,7 +38,7 @@
               <template v-for="(problem, index) in contestData.problems">
                 <div class="ant-list-bordered contest-problem-list-item" :key="problem.title + index">
                   <span class="contest-problem-list-item-label">
-                    <b>{{ ContestProblemLabel[index] }}</b>
+                    <b>{{ getContestProblemLabel(index, true, contestData.problems.length) }}</b>
                   </span>
                   <span class="contest-problem-list-item-id">
                     <span>题目编号：</span>
@@ -126,7 +126,7 @@ export default {
     ...mapState([
         'host',
         'ContentTypeText',
-        'ContestProblemLabel'
+        'getContestProblemLabel'
     ])
   },
   methods: {

@@ -1,11 +1,11 @@
 <template>
   <base-box-frame>
     <template v-slot:content>
-      <a-table :columns="columns" :data-source="problemList" size="middle" :pagination="false" :rowClassName="getRowClassName">
+      <a-table :columns="columns" :data-source="problemList" size="middle" :pagination="false" :rowClassName="getRowClassName" :loading="loading">
         <span slot="problemId" slot-scope="problemId">
-          <b>{{problemId}}</b>
+          <b>{{getContestProblemLabel(problemId, isContest, problemList.length)}}</b>
         </span>
-        <router-link :to="{path:`/contest/${contestInfo.contestId}/problem/${record.problemId}`}" slot="problemTitle" slot-scope="problemTitle, record" v-if="contestInfo">{{problemTitle}}</router-link>
+        <router-link :to="{path:`/contest/${$route.params.contestId}/problem/${record.problemId}`}" slot="problemTitle" slot-scope="problemTitle, record" v-if="isContest">{{problemTitle}}</router-link>
         <router-link :to="{path:`/problem/${record.problemId}/`}" slot="problemTitle" slot-scope="problemTitle, record" v-else>{{problemTitle}}</router-link>
         <template slot="statusIcon" slot-scope="statusIcon">
           <a-icon v-if="statusIcon === 1"  type="check" style="color: green"/>
@@ -15,7 +15,7 @@
           <a-tag v-for="tag in tagSet" :key="tag+Math.random()">{{tag}}</a-tag>
         </template>
       </a-table>
-      <div class="table-pagination-box" v-if="!contestInfo">
+      <div class="table-pagination-box" v-if="!isContest">
         <a-pagination :current="page" :total="count" :pageSize="pageSize" @change="pageChange"/>
       </div>
     </template>
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 const columns = [
   {
     title: '#',
@@ -59,14 +61,6 @@ const columns = [
     width: '70px',
     align: 'center'
   },
-  // {
-  //   title: '状态',
-  //   dataIndex: 'status',
-  //   key: 'status',
-  //   scopedSlots: { customRender: 'statusIcon' },
-  //   width: '60px',
-  //   align: 'center'
-  // },
 ];
 
 import BaseBoxFrame from '@/components/frame/base-box-frame'
@@ -77,10 +71,11 @@ export default {
   },
   props: {
     problemList: Array,
-    contestInfo: Object,
     page: Number,
     pageSize: Number,
     count: Number,
+    isContest: Boolean,
+    loading: Boolean
   },
   data() {
     return {
@@ -92,6 +87,9 @@ export default {
         size: "big"
       }
     }
+  },
+  computed: {
+    ...mapState(['getContestProblemLabel'])
   },
   methods: {
     getRowClassName(record) {
