@@ -1,31 +1,33 @@
 <template>
   <base-box-frame>
     <template v-slot:content>
-      <a-table :columns="columns" :data-source="data" size="middle" :pagination="false">
-        <span slot="userRank" slot-scope="userRank">
-          <b>{{userRank}}</b>
+      <a-table :columns="columns" :data-source="rankData" size="middle" :pagination="false" :loading="loading">
+        <span slot="rank" slot-scope="rank">
+          <b>{{rank}}</b>
         </span>
         <span slot="nickname" slot-scope="nickname, user">
           <a :href="'#/user/'+user.username">{{nickname}}</a>
         </span>
         <span slot="percent" slot-scope="percent">
-          {{((percent.solved/percent.submitted)*100).toFixed(0)}}%
+          {{ percent.submitted ? ((percent.solved/percent.submitted)*100).toFixed(0) : 0}}%
         </span>
       </a-table>
       <div class="table-pagination-box">
-        <a-pagination :default-current="6" :total="500" />
+        <a-pagination v-model="page" :total="count" :defaultPageSize="pageSize" @change="pageChange"/>
       </div>
     </template>
   </base-box-frame>
 </template>
 
 <script>
+import {mapState} from "vuex";
+const pageSize = 20
 const columns = [
   {
     title: '#',
-    dataIndex: 'userRank',
-    key: 'userRank',
-    scopedSlots: { customRender: 'userRank' },
+    dataIndex: 'rank',
+    key: 'rank',
+    scopedSlots: { customRender: 'rank' },
     width: '60px',
     align: 'center'
   },
@@ -65,208 +67,6 @@ const columns = [
     align: 'center'
   },
 ];
-const data = [
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-  {
-    userRank: 1,
-    username: '31701013',
-    nickname: '罗老嫖',
-    solved: 2100,
-    submitted: 2202,
-    signature: '用户签名'
-  },
-];
 
 import BaseBoxFrame from '@/components/frame/base-box-frame'
 export default {
@@ -276,12 +76,61 @@ export default {
   },
   data() {
     return {
+      pageSize,
       columns,
-      data
+      rankData: [],
+      count: 0,
+      loading: false,
+      page: 1
+    }
+  },
+  computed: {
+    ...mapState(['host', 'buildGetQuery'])
+  },
+  methods: {
+    getData() {
+      let that = this
+      let page = this.$route.query.page
+      if (!page) {
+        page = 1;
+      }
+      that.page = page
+      that.loading = true
+      that.$http.get(that.host + '/user/rank' + that.buildGetQuery({page: page,  pageSize: pageSize}))
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              that.rankData = Data.users
+              that.count = Data.count
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.loading = false
+          })
+    },
+    pageChange(page) {
+      this.$router.push({
+        name: 'rank',
+        query: {
+          page: page
+        }
+      })
     }
   },
   created() {
     this.$store.commit('updateCurrentPage', 'rank')
+    this.getData()
+  },
+  watch: {
+    '$route': function () {
+      this.getData()
+    }
   }
 }
 </script>

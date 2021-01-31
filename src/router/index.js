@@ -20,6 +20,11 @@ const routes = [
     component: () => import('../views/Rank')
   },
   {
+    path: '/user/:username',
+    name: 'user',
+    component: () => import('../views/User')
+  },
+  {
     path: '/contests',
     name: 'contests',
     component: () => import('../views/Contests')
