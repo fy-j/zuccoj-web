@@ -2,7 +2,7 @@
   <base-box-frame>
     <template v-slot:content>
       <div style="margin-top: 20px">
-        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/submit`})}">
+        <div class="contest-right-button problem-submit-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/submit`})}">
           <a-icon type="upload" /> <span style="margin-left: 10px">提交代码</span>
         </div>
         <a-divider />
@@ -99,5 +99,10 @@ export default {
   background: rgb(244,244,244);
   cursor: pointer;
   box-shadow: inset 30px 0 0 -20px rgb(24,144,255);
+}
+.problem-submit-button:hover{
+  background: rgb(244,244,244);
+  cursor: pointer;
+  box-shadow: inset 30px 0 0 -20px rgb(82, 196, 26);
 }
 </style>

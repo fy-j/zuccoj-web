@@ -2,6 +2,12 @@
   <base-box-frame>
     <template v-slot:content>
       <div style="margin-top: 10px">
+        <template v-if="$route.params.problemId !== undefined">
+            <div class="contest-right-button problem-submit-button" style="margin-top: 20px" @click="() => {$router.push({path:`/contest/${$route.params.contestId}/submit/${$route.params.problemId}`})}">
+              <a-icon type="upload" /> <span style="margin-left: 10px">提交代码</span>
+            </div>
+          <a-divider />
+        </template>
         <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/problems')}">
           <a-icon type="unordered-list" /> <span style="margin-left: 10px">题目列表</span>
         </div>
@@ -11,7 +17,7 @@
         <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/my')}">
           <a-icon type="upload" /> <span style="margin-left: 10px">我的提交</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/status')}">
+        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/status')}" v-if="false">
           <a-icon type="code" /> <span style="margin-left: 10px">评测记录</span>
         </div>
       </div>
@@ -160,5 +166,10 @@ export default {
    background: rgb(244,244,244);
    cursor: pointer;
    box-shadow: inset 30px 0 0 -20px rgb(24,144,255);
+ }
+ .problem-submit-button:hover{
+   background: rgb(244,244,244);
+   cursor: pointer;
+   box-shadow: inset 30px 0 0 -20px rgb(82, 196, 26);
  }
 </style>

@@ -44,6 +44,11 @@ export default new Vuex.Store({
       }
       return ContestProblemLabel[id]
     },
+    getContestProblemIdFromLabel: function (id) {
+      id = String(id)
+      let i = ContestProblemLabel.indexOf(id)
+      return (i===-1)?(id):(i)
+    },
     buildGetQuery: function (data) {
       let res = ''
       for (let item in data) {
@@ -153,6 +158,10 @@ export default new Vuex.Store({
             code: String(code)
           }
         })
+      } else {
+        if (code == -1) {
+          router.go(-1)
+        }
       }
     }
   },

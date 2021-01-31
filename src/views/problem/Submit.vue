@@ -3,6 +3,9 @@
     <template v-slot:content>
       <div style="padding: 10px">
         <h2>提交代码</h2>
+        <template v-if="$route.params.contestId">
+          比赛编号： <b>{{$route.params.contestId}}</b> <br>
+        </template>
         题目编号： <b>{{$route.params.problemId}}</b>
         <br><br>
         代码语言：<br>
@@ -15,6 +18,9 @@
           </a-select-option>
           <a-select-option value="text/x-java">
             Java
+          </a-select-option>
+          <a-select-option value="!" disabled>
+            Python
           </a-select-option>
         </a-select>
         <br><br>
@@ -30,6 +36,7 @@
 <script>
 import BaseBoxFrame from '@/components/frame/base-box-frame'
 import CodeEditor from '@/components/problem/code-editor'
+import {mapState} from "vuex";
 export default {
   name: "Submit",
   components: {
@@ -43,6 +50,12 @@ export default {
       code: ''
     }
   },
+  computed: {
+    ...mapState([
+        'host',
+        'getContestProblemIdFromLabel'
+    ])
+  },
   methods: {
     getLangCode(s) {
       switch (s) {
@@ -54,12 +67,24 @@ export default {
     },
     submitCode() {
       let that = this
-      that.submitting = true
+
+      if (that.code.length < 6) {
+        that.$message.error('代码过短')
+        return
+      }
+
+      let problemId = that.getContestProblemIdFromLabel(that.$route.params.problemId)
+      let contestId = that.$route.params.contestId
+
       let sendData = new FormData()
-      sendData.append('problemId', that.$route.params.problemId)
+      sendData.append('problemId', problemId)
       sendData.append('lang', that.getLangCode(that.language))
       sendData.append('code', that.code)
-      that.$http.post(that.$store.state.host + '/solution/submit', sendData)
+      if (contestId) {
+        sendData.append('contestId', contestId)
+      }
+      that.submitting = true
+      that.$http.post(that.host + `${contestId?'/contest':''}/solution/submit`, sendData)
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data

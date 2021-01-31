@@ -8,7 +8,7 @@
             <b>#{{ $route.params.solutionId }}</b>
           </a-descriptions-item>
           <a-descriptions-item label="所属题目" :span="2">
-            {{ solutionData.problemId }}
+            <b>{{ solutionData.problemTitle }}</b>
           </a-descriptions-item>
           <a-descriptions-item label="提交用户">
             {{ solutionData.username }}

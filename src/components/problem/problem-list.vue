@@ -5,7 +5,7 @@
         <span slot="problemId" slot-scope="problemId">
           <b>{{getContestProblemLabel(problemId, isContest, problemList.length)}}</b>
         </span>
-        <router-link :to="{path:`/contest/${$route.params.contestId}/problem/${record.problemId}`}" slot="problemTitle" slot-scope="problemTitle, record" v-if="isContest">{{problemTitle}}</router-link>
+        <router-link :to="{path:`/contest/${$route.params.contestId}/problem/${getContestProblemLabel(record.problemId, isContest, problemList.length)}`}" slot="problemTitle" slot-scope="problemTitle, record" v-if="isContest">{{problemTitle}}</router-link>
         <router-link :to="{path:`/problem/${record.problemId}/`}" slot="problemTitle" slot-scope="problemTitle, record" v-else>{{problemTitle}}</router-link>
         <template slot="statusIcon" slot-scope="statusIcon">
           <a-icon v-if="statusIcon === 1"  type="check" style="color: green"/>

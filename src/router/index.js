@@ -64,6 +64,14 @@ const routes = [
     name: 'contest',
     component: () => import('../views/contest/Contest'),
     children: [{
+      path: 'problem/:problemId',
+      name: 'contest_problem_display',
+      component: () => import('../views/problem/Description')
+    },{
+      path: 'submit/:problemId',
+      name: 'contest_solution_submit',
+      component: () => import('../views/problem/Submit')
+    },{
       path: 'problems',
       name: 'contest_problems',
       component: () => import('../views/contest/Problems')
