@@ -2,7 +2,7 @@
   <title-box-frame title="最近提交数据/ data">
     <template v-slot:content>
       <div style="width: 98%">
-        <ve-line :data="chartData" :settings="chartSettings" :legend-visible="false" :extend="extend"></ve-line>
+        <ve-line :data="chartData" :settings="chartSettings" :legend-visible="false" :extend="extend" :colors="['#73b3f3','#66d02c']"></ve-line>
       </div>
     </template>
   </title-box-frame>
