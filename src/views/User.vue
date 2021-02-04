@@ -22,11 +22,16 @@
                   <a-icon type="upload" /><span> 共 <b style="color: black">{{userInfo.submitted}}</b> 次提交</span>
                 </div>
                 <div title="总过题数">
-                  <a-icon type="check-circle" /><span> 共解决 <b style="color: black">{{userInfo.solved}}</b> 题</span>
+                  <a-icon type="check-circle" /><span> 共解决 <b style="color: black">{{userInfo.solved}}</b> 个问题</span>
                 </div>
                 <div title="用户签名" v-if="userInfo.signature">
                   <a-icon type="sound" /><span> {{userInfo.signature}}</span>
                 </div>
+              </div>
+              <div class="user-info-edit-button-box" v-if="(user) && (user.username === $route.params.username)">
+                <a-button block @click="userEditClick">
+                  个人设置
+                </a-button>
               </div>
             </a-skeleton>
           </div>
@@ -42,6 +47,50 @@
           </div>
         </div>
       </div>
+      <a-modal
+          v-model="userEditVisible"
+          :confirm-loading="userEditSubmitting"
+          title="个人设置"
+          ok-text="提交"
+          cancel-text="取消"
+          @ok="userEditCheck"
+      >
+        <loading-box-frame v-if="userEditLoading" height="480px" />
+        <a-form-model :rules="userEditRules" :model="userEditData" ref="userEditForm"  :label-col="{span:4}" :wrapper-col="{span:20}" v-else>
+          <a-form-model-item prop="username" label="用户名">
+            <a-input v-model="userEditData.username" placeholder="用户名" disabled>
+            </a-input>
+          </a-form-model-item>
+          <a-form-model-item prop="password" label="密码">
+            <a-input v-model="userEditData.password" placeholder="密码" type="password">
+            </a-input>
+          </a-form-model-item>
+          <a-form-model-item prop="newPassword" label="新密码">
+            <a-input v-model="userEditData.newPassword" placeholder="新密码，留空表示不修改" type="password">
+            </a-input>
+          </a-form-model-item>
+          <a-form-model-item prop="newPassword2" label="确认新密码" v-if="userEditData.newPassword">
+            <a-input v-model="userEditData.newPassword2" placeholder="再次确认新密码" type="password">
+            </a-input>
+          </a-form-model-item>
+          <a-form-model-item prop="nickname" label="昵称">
+            <a-input v-model="userEditData.nickname" placeholder="昵称">
+            </a-input>
+          </a-form-model-item>
+          <a-form-model-item prop="email" label="邮箱">
+            <a-input v-model="userEditData.email" placeholder="邮箱">
+            </a-input>
+          </a-form-model-item>
+          <a-form-model-item prop="school" label="学校">
+            <a-input v-model="userEditData.school" placeholder="学校">
+            </a-input>
+          </a-form-model-item>
+          <a-form-model-item prop="signature" label="签名">
+            <a-input v-model="userEditData.signature" placeholder="签名">
+            </a-input>
+          </a-form-model-item>
+        </a-form-model>
+      </a-modal>
     </template>
   </base-box-frame>
 </template>
@@ -51,7 +100,7 @@ import BaseBoxFrame from '@/components/frame/base-box-frame'
 import SubmitCalendarHeatmap from '@/components/user/submit-calendar-heatmap'
 import SubmitAcLineChart from '@/components/user/submit-ac-line-chart'
 import LoadingFrameBox from '@/components/frame/loading-box-frame'
-import {mapState} from "vuex";
+import {mapMutations, mapState} from "vuex";
 
 export default {
   name: "User",
@@ -69,15 +118,56 @@ export default {
       infoLoading: false,
       weekLoading: false,
       yearLoading: false,
+      userEditVisible: false,
+      userEditLoading: false,
+      userEditSubmitting: false,
+      userEditData: {
+        username: '',
+        nickname: '',
+        email: '',
+        signature: '',
+        school: '',
+        password: '',
+        newPassword: '',
+        newPassword2: ''
+      },
+      userEditRules: {
+        username: [
+          {required: true, message: '请输入用户名', trigger: 'blur'},
+        ],
+        nickname: [
+          {required: true, message: '请输入昵称', trigger: 'blur'},
+          {min: 6, max: 16, message: '长度在6-16之间', trigger: 'blur'},
+        ],
+        password: [
+          {required: true, message: '请验证密码以确认身份', trigger: 'blur'},
+          {min: 6, max: 20, message: '长度在6-20之间', trigger: 'blur'},
+        ],
+        newPassword: [
+          {min: 6, max: 20, message: '长度在6-20之间', trigger: 'blur'},
+        ],
+        newPassword2: [
+          { validator: this.password2Check, trigger: 'blur' }
+        ],
+      }
     }
   },
   computed: {
     ...mapState([
         'host',
-        'buildGetQuery'
+        'buildGetQuery',
+        'user'
     ])
   },
   methods: {
+    ...mapMutations(['updateUser']),
+    password2Check(rule, value, callback) {
+      if (value !== this.userEditData.newPassword) {
+        callback(new Error('两次新密码不一致'))
+      } else {
+        callback()
+      }
+    },
     getUserInfo() {
       let that = this
       let username = this.$route.params.username
@@ -153,6 +243,81 @@ export default {
             that.yearLoading = false
           })
     },
+    getUserEditData() {
+      let that = this
+      let username = this.$route.params.username
+      that.userEditLoading = true
+      that.$http.get(that.host + '/user/edit' + that.buildGetQuery({username: username}))
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              that.userEditData = {
+                username: Data.username,
+                nickname: Data.nickname,
+                email: Data.email,
+                signature: Data.signature,
+                school: Data.school,
+                password: '',
+                newPassword: '',
+                newPassword2: ''
+              }
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.userEditLoading = false
+          })
+    },
+    userEditClick() {
+      this.userEditVisible = true
+      this.getUserEditData()
+    },
+    userEditCheck() {
+      let that = this
+      that.$refs["userEditForm"].validate(valid => {
+        if (valid) {
+          that.userEditSubmit()
+        }
+      })
+    },
+    userEditSubmit() {
+      let that = this
+      let username = this.$route.params.username
+      that.userEditSubmitting = true
+      let sendData = new FormData()
+      sendData.append('username', username)
+      sendData.append('nickname', that.userEditData.nickname)
+      sendData.append('email', that.userEditData.email)
+      sendData.append('signature', that.userEditData.signature)
+      sendData.append('school', that.userEditData.school)
+      sendData.append('password', that.userEditData.password)
+      if (that.userEditData.newPassword !== '') {
+        sendData.append('newPassword', that.userEditData.newPassword)
+      }
+      that.$http.post(that.host + '/user/update', sendData)
+          .then(data => {
+            if (data.data.code === 200) {
+              that.$message.success(data.data.msg)
+              that.updateUser(false)
+              that.userEditVisible = false
+              that.$router.push({name: 'refresh'})
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.userEditSubmitting = false
+          })
+    },
     getAllData() {
       this.getUserInfo()
       this.getWeekData()
@@ -209,5 +374,9 @@ export default {
 }
 .user-info-right{
   width: 760px
+}
+.user-info-edit-button-box{
+  margin-top: 30px;
+  padding-right: 13px;
 }
 </style>

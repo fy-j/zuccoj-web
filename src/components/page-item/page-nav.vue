@@ -2,7 +2,7 @@
   <a-affix :offset-top="0">
     <div class="page-nav">
       <div class="middle-box">
-        <a-menu v-model="$store.state.current_page" mode="horizontal" @click="navClick" class="nav-menu">
+        <a-menu v-model="current_page" mode="horizontal" @click="navClick" class="nav-menu">
           <a-menu-item key="home"> <a-icon type="home" theme="filled"/>首页 </a-menu-item>
           <a-menu-item key="problems"> <a-icon type="read" theme="filled" />题库 </a-menu-item>
           <a-menu-item key="rank"> <a-icon type="crown" theme="filled" />排名 </a-menu-item>
@@ -10,14 +10,14 @@
           <a-menu-item key="gym"> <a-icon type="tags" theme="filled" />题集 </a-menu-item>
         </a-menu>
         <div class="user-box">
-          <template v-if="$store.state.user">
+          <template v-if="user">
             <a-dropdown>
               <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                <a-icon type="user" /> {{$store.state.user.nickname}} <a-icon type="down" />
+                <a-icon type="user" /> {{user.nickname}} <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
-                <a-menu-item key="1">账号设置</a-menu-item>
-                <a-menu-item key="2">提交记录</a-menu-item>
+                <a-menu-item key="1" @click="gotoUserPage">账号设置</a-menu-item>
+                <a-menu-item key="2" @click="gotoUserSubmissions">提交记录</a-menu-item>
                 <a-menu-divider />
                 <a-menu-item key="3" @click="logoutSubmit">退出登录</a-menu-item>
               </a-menu>
@@ -95,7 +95,7 @@
         <a-form-model-item prop="captcha">
           <a-input v-model="reg.captcha" placeholder="Captcha *" size="large" class="nav-input">
             <a-icon slot="prefix" type="safety" />
-            <img slot="suffix" :src="captchaUrl" @click="() => {this.captchaUrl = this.$store.state.host+'/captcha/get?p='+new Date().getTime()}" alt="看不清? 单击更换图片" width="100%" title="看不清? 单击更换图片">
+            <img slot="suffix" :src="captchaUrl" @click="() => {this.captchaUrl = this.host+'/captcha/get?p='+new Date().getTime()}" alt="看不清? 单击更换图片" width="100%" title="看不清? 单击更换图片">
           </a-input>
         </a-form-model-item>
       </a-form-model>
@@ -104,6 +104,8 @@
 </template>
 
 <script>
+  import {mapState, mapMutations} from "vuex";
+
   export default {
     name: "page-nav",
     data() {
@@ -112,7 +114,7 @@
         loginSubmitting: false,
         regModalVisible: false,
         regSubmitting: false,
-        captchaUrl: this.$store.state.host+'/captcha/get?p='+new Date().getTime(),
+        captchaUrl: this.host+'/captcha/get?p='+new Date().getTime(),
         login: {
           username: '',
           password: ''
@@ -150,7 +152,11 @@
         }
       }
     },
+    computed: {
+      ...mapState(['host', 'user', 'current_page'])
+    },
     methods: {
+      ...mapMutations(['updateUser', 'logout']),
       navClick(item) {
         this.$router.push({name:item.key})
       },
@@ -172,10 +178,10 @@
         let sendData = new FormData()
         sendData.append('username', that.login.username)
         sendData.append('password', that.login.password)
-        that.$http.post(that.$store.state.host + '/user/login', sendData)
+        that.$http.post(that.host + '/user/login', sendData)
         .then(data => {
           if (data.data.code === 200) {
-            that.$store.commit('updateUser', true)
+            that.updateUser(true)
             that.loginModalVisible = false
             that.login = {
               username: '',
@@ -195,7 +201,7 @@
       },
       logoutSubmit() {
         let that = this
-        that.$store.commit('logout')
+        that.logout()
       },
       usernameCheck(rule, value, callback) {
         if (!/^[A-Za-z0-9._]{6,16}$/.test(value)) {
@@ -231,7 +237,7 @@
         sendData.append('email', that.reg.email)
         sendData.append('captcha', that.reg.captcha)
 
-        that.$http.post(that.$store.state.host + '/user/register', sendData)
+        that.$http.post(that.host + '/user/register', sendData)
             .then(data => {
               if (data.data.code === 200) {
                 that.$message.success("注册成功")
@@ -260,6 +266,30 @@
             .finally(() => {
               that.regSubmitting = false
             })
+      },
+      gotoUserSubmissions() {
+        if (!this.user) {
+          this.$message.error('请先登录')
+          return
+        }
+        this.$router.push({
+          name: 'status',
+          query: {
+            username: this.user.username
+          }
+        })
+      },
+      gotoUserPage() {
+        if (!this.user) {
+          this.$message.error('请先登录')
+          return
+        }
+        this.$router.push({
+          name: 'user',
+          params: {
+            username: this.user.username
+          }
+        })
       }
     }
   }
