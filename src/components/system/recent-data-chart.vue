@@ -2,7 +2,8 @@
   <title-box-frame title="最近提交数据/ data">
     <template v-slot:content>
       <div style="width: 98%">
-        <ve-line :data="chartData" :settings="chartSettings" :legend-visible="false" :extend="extend" :colors="['#73b3f3','#66d02c']"></ve-line>
+        <loading-box-frame v-if="loading"></loading-box-frame>
+        <ve-line v-else :data="chartData" :settings="chartSettings" :legend-visible="false" :extend="extend" :colors="['#73b3f3','#66d02c']"></ve-line>
       </div>
     </template>
   </title-box-frame>
@@ -10,10 +11,13 @@
 
 <script>
 import TitleBoxFrame from '@/components/frame/title-box-frame'
+import LoadingBoxFrame from '@/components/frame/loading-box-frame'
+import {mapState} from "vuex";
 export default {
   name: "recent-data-chart",
   components: {
-    'title-box-frame': TitleBoxFrame
+    'title-box-frame': TitleBoxFrame,
+    'loading-box-frame': LoadingBoxFrame
   },
   data() {
     return {
@@ -31,16 +35,45 @@ export default {
       },
       chartData: {
         columns: ['Date', 'Submit', 'Accept'],
-        rows: [
-          { 'Date': '2019-10-26', 'Submit': 124, 'Accept': 80},
-          { 'Date': '2020-04-26', 'Submit': 233, 'Accept': 70},
-          { 'Date': '2020-06-26', 'Submit': 292, 'Accept': 123},
-          { 'Date': '2020-07-26', 'Submit': 172, 'Accept': 142},
-          { 'Date': '2020-09-26', 'Submit': 379, 'Accept': 192},
-          { 'Date': '2020-10-26', 'Submit': 459, 'Accept': 293}
-        ]
-      }
+        rows: []
+      },
+      loading: false,
     }
+  },
+  computed: {
+    ...mapState(['host'])
+  },
+  methods: {
+    getData() {
+      let that = this
+      that.loading = true
+      that.chartData.rows = []
+      that.$http.get(that.host + '/solution/weekStat')
+          .then(data => {
+            if (data.data.code === 200) {
+              let Data = data.data.data
+              for (let item of Data) {
+                that.chartData.rows.push({
+                  Date: item.date,
+                  Submit: item.submitted,
+                  Accept: item.solved
+                })
+              }
+            } else {
+              that.$message.error(data.data.msg)
+              that.$store.commit('errorPage', data.data.code)
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.loading = false
+          })
+    }
+  },
+  created() {
+    this.getData()
   }
 }
 </script>
