@@ -9,7 +9,7 @@
         </span>
 
         <span slot="problemId" slot-scope="problemId">
-          <router-link :to="{path:`/problem/${problemId}/`}">{{problemId}}</router-link>
+          <router-link :to="($route.params.contestId) ? ({name: 'contest_problem_display', params: {contestId: $route.params.contestId, problemId: getContestProblemLabel(problemId, $route.params.contestId, 26*2)}}):({path:`/problem/${problemId}/`})">{{getContestProblemLabel(problemId, $route.params.contestId, 26*2)}}</router-link>
         </span>
 
         <span slot="judgeResultResult" slot-scope="record">
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 const columns = [
   {
     title: '#',
@@ -164,6 +166,9 @@ export default {
       columns,
       myColumns
     }
+  },
+  computed: {
+    ...mapState(['getContestProblemLabel'])
   }
 }
 </script>

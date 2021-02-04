@@ -1,7 +1,7 @@
 <template>
   <base-box-frame>
     <template v-slot:content>
-      <a-table :columns="columns" :data-source="standingsData" size="middle" bordered :scroll="{x:((problems.length<=7)?(false):(320+65*problems.length))}" :pagination="{pageSize: 15}">
+      <a-table :columns="dynamicColumns" :data-source="standingsData" size="middle" bordered :scroll="{x:((problems.length<=7)?false:(320+65*problems.length))}" :pagination="false">
         <span slot="userRank" slot-scope="userRank">
           <b>{{userRank}}</b>
         </span>
@@ -375,13 +375,15 @@ export default {
     return {
       columns,
       standingsData,
-      problems
+      problems,
+      dynamicColumns: []
     }
   },
   methods: {
     dataInit() {
+      this.dynamicColumns = JSON.parse(JSON.stringify(this.columns))
       for (let problem of this.problems) {
-        columns.push({
+        this.dynamicColumns.push({
           title: problem,
           key: problem,
           width: '65px',

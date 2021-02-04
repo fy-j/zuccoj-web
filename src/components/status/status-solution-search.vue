@@ -1,10 +1,10 @@
 <template>
   <div>
     <a-form layout="inline">
-      <a-form-item label="题目">
-        <a-input placeholder="Problem ID" type="number" v-model="problemId" class="status-search-input"></a-input>
+      <a-form-item label="题目" v-show="problemIdVisible">
+        <a-input placeholder="Problem ID" v-model="problemId" class="status-search-input"></a-input>
       </a-form-item>
-      <a-form-item label="用户">
+      <a-form-item label="用户" v-show="usernameVisible">
         <a-input placeholder="Username" v-model="username" class="status-search-input"></a-input>
       </a-form-item>
       <a-form-item label="语言">
@@ -79,28 +79,38 @@ export default {
       problemId: '',
       username: '',
       lang: '',
-      result: ''
+      result: '',
+      problemIdVisible: true,
+      usernameVisible: true,
     }
   },
   methods: {
     loadParams() {
-      this.problemId = this.$route.query.problemId ? Number(this.$route.query.problemId) : ''
+      this.problemId = this.$route.query.problemId ? (this.$route.query.problemId) : ''
       this.username = this.$route.query.username ? this.$route.query.username : ''
       this.lang = this.$route.query.lang ? Number(this.$route.query.lang) : ''
       this.result = this.$route.query.result ? Number(this.$route.query.result) : ''
+      if (this.$route.params.problemId) {
+        this.problemId = (this.$route.params.problemId)
+        this.problemIdVisible = false
+      }
+      if (this.$route.params.username) {
+        this.username = this.$route.params.username
+        this.usernameVisible = false
+      }
     },
     onClick() {
       let query = {}
-      if (this.problemId != null) {
+      if (this.problemId) {
         query['problemId'] = this.problemId
       }
-      if (this.username !== '') {
+      if (this.username) {
         query['username'] = this.username
       }
-      if (this.lang != null) {
+      if (this.lang) {
         query['lang'] = this.lang
       }
-      if (this.result != null) {
+      if (this.result) {
         query['result'] = this.result
       }
       this.$emit('search', query)

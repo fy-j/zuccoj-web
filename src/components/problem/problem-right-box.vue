@@ -9,10 +9,10 @@
         <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}`})}">
           <a-icon type="profile" /> <span style="margin-left: 10px">题目描述</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/my`})}">
+        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/status/${user.username}`})}" v-if="user">
           <a-icon type="menu" /> <span style="margin-left: 10px">我的提交</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/all`})}">
+        <div class="contest-right-button" @click="() => {$router.push({path:`/problem/${problemInfo.problemId}/status`})}">
           <a-icon type="code" /> <span style="margin-left: 10px">所有提交</span>
         </div>
         <a-divider />
@@ -55,6 +55,7 @@
 
 <script>
 import BaseBoxFrame from '@/components/frame/base-box-frame'
+import {mapState} from "vuex";
 export default {
   name: "problem-right-box",
   components: {
@@ -66,6 +67,9 @@ export default {
   data() {
     return {
     }
+  },
+  computed: {
+    ...mapState(['user'])
   }
 }
 </script>

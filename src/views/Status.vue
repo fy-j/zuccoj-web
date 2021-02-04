@@ -9,7 +9,7 @@
           <a-button-group>
             <a-button @click="gotoPage(1)"><a-icon type="double-left"/>首页</a-button>
             <a-button @click="gotoPage(2)" :disabled="!$route.query.offset"><a-icon type="left"/>上一页</a-button>
-            <a-button @click="gotoPage(3)" :disabled="!statusData || statusData.length === 0"><a-icon type="right" />下一页</a-button>
+            <a-button @click="gotoPage(3)" :disabled="!statusData || statusData.length < pageSize"><a-icon type="right" />下一页</a-button>
           </a-button-group>
         </div>
       </template>
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 const pageSize = 20
 import StatusTable from '@/components/status/status-table'
 import BaseBoxFrame from '@/components/frame/base-box-frame'
@@ -38,17 +40,49 @@ export default {
       loading: false
     }
   },
+  computed: {
+    ...mapState(['host','buildGetQuery','getContestProblemIdFromLabel'])
+  },
   methods: {
-    getData() {
-      let that = this
-      let offset = that.$route.query.offset ? that.$route.query.offset : 0
-      let size = that.pageSize
+    queryBuild() {
+      let offset = this.$route.query.offset ? this.$route.query.offset : 0
+      let size = this.pageSize
       let problemId = this.$route.query.problemId
       let username = this.$route.query.username
       let lang = this.$route.query.lang
       let result = this.$route.query.result
+      let query = {}
+      query['offset'] = offset
+      query['size'] = size
+      if (problemId) {
+        query['problemId'] = problemId
+      }
+      if (username) {
+        query['username'] = username
+      }
+      if (lang) {
+        query['lang'] = lang
+      }
+      if (result) {
+        query['result'] = result
+      }
+      query['contestId'] = 0
+      if (this.$route.params.problemId) {
+        query['problemId'] = this.$route.params.problemId
+      }
+      if (this.$route.params.contestId) {
+        query['contestId'] = this.$route.params.contestId
+      }
+      if (query.problemId) {
+        query.problemId = this.getContestProblemIdFromLabel(query.problemId)
+      }
+      return query
+    },
+    getData() {
+      let that = this
+      let query = that.queryBuild()
       that.loading = true
-      that.$http.get(that.$store.state.host + '/solution/status?contestId=0&offset='+offset+(size?`&size=${size}`:'')+(problemId?`&problemId=${problemId}`:'')+(username?`&username=${username}`:'')+(lang?`&lang=${lang}`:'')+(result?`&result=${result}`:''))
+      that.$http.get(that.host + '/solution/status' + that.buildGetQuery(query))
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data
@@ -82,7 +116,8 @@ export default {
     },
     queryStatus(query) {
       this.$router.push({
-        name: 'status',
+        name: this.$route.name,
+        params: this.$route.params,
         query: query
       })
     }

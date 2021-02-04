@@ -8,16 +8,16 @@
             </div>
           <a-divider />
         </template>
-        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/problems')}">
+        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_problems', params: {contestId: contestInfo.contestId}})}">
           <a-icon type="unordered-list" /> <span style="margin-left: 10px">题目列表</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/standings')}">
+        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_standings', params: {contestId: contestInfo.contestId}})}">
           <a-icon type="area-chart" /> <span style="margin-left: 10px">比赛榜单</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/my')}">
+        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_my', params: {contestId: contestInfo.contestId, username: user.username}})}" v-if="user">
           <a-icon type="upload" /> <span style="margin-left: 10px">我的提交</span>
         </div>
-        <div class="contest-right-button" @click="() => {$router.push('/contest/'+contestInfo.contestId+'/status')}" v-if="false">
+        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_status', params: {contestId: contestInfo.contestId}})}" v-if="user && (user.status >= PermissionLevel.ADMIN || $moment() >= contestInfo.endTime)">
           <a-icon type="code" /> <span style="margin-left: 10px">评测记录</span>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['ContentTypeText'])
+    ...mapState(['ContentTypeText', 'user', 'PermissionLevel'])
   },
   methods: {
     progressClock() {

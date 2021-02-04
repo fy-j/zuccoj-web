@@ -62,7 +62,15 @@ const routes = [
     },{
       path: 'submit',
       component: () => import('../views/problem/Submit')
-    }]
+    },{
+      path: 'status/:username',
+      name: 'problem_my',
+      component: () => import('../views/Status')
+    },{
+      path: 'status',
+      name: 'problem_status',
+      component: () => import('../views/Status')
+    },]
   },
   {
     path: '/contest/:contestId',
@@ -85,9 +93,9 @@ const routes = [
       name: 'contest_status',
       component: () => import('../views/Status')
     },{
-      path: 'my',
+      path: 'status/:username',
       name: 'contest_my',
-      component: () => import('../components/contest/contest-my-submit')
+      component: () => import('../views/Status')
     },{
       path: 'standings',
       name: 'contest_standings',
