@@ -1,17 +1,19 @@
 <template>
-  <loading-box-frame v-if="loading"></loading-box-frame>
-  <div v-else>
-    <div class="contest-title">
-      {{contestInfo.contestName}} <span style="cursor: pointer" @click="()=>{rightBoxShow=!rightBoxShow}"><a-icon :type="rightBoxShow?'arrows-alt':'shrink'" /></span>
-    </div>
-    <a-row :gutter="16">
-      <a-col class="gutter-row" :span="rightBoxShow?18:24">
-        <router-view />
-      </a-col>
-      <a-col class="gutter-row" :span="6" v-if="rightBoxShow">
-        <contest-right-box :contest-info="contestInfo"></contest-right-box>
-      </a-col>
-    </a-row>
+  <div>
+    <loading-box-frame v-if="loading"></loading-box-frame>
+    <template v-else>
+      <div class="contest-title">
+        {{contestInfo.contestName}} <span style="cursor: pointer" @click="()=>{rightBoxShow=!rightBoxShow}"><a-icon :type="rightBoxShow?'arrows-alt':'shrink'" /></span>
+      </div>
+      <a-row :gutter="16">
+        <a-col class="gutter-row" :span="rightBoxShow?18:24">
+          <router-view />
+        </a-col>
+        <a-col class="gutter-row" :span="6" v-if="rightBoxShow">
+          <contest-right-box :contest-info="contestInfo"></contest-right-box>
+        </a-col>
+      </a-row>
+    </template>
     <a-modal
         v-model="inputPasswordVisible"
         title="输入比赛密码"

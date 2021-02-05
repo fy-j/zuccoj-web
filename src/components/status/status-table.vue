@@ -33,7 +33,6 @@
         </span>
 
         <span slot="submitTime" slot-scope="submitTime">
-<!--          {{  $store.state.dateFormat(submitTime, true) }}-->
           {{ submitTime }}
         </span>
 
