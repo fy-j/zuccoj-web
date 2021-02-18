@@ -7,42 +7,42 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/Home')
+    component: () => import('../views/home/Home')
   },
   {
     path: '/problems',
     name: 'problems',
-    component: () => import('../views/Problems')
+    component: () => import('../views/problem/Problems')
   },
   {
     path: '/rank',
     name: 'rank',
-    component: () => import('../views/Rank')
+    component: () => import('../views/rank/Rank')
   },
   {
     path: '/user/:username',
     name: 'user',
-    component: () => import('../views/User')
+    component: () => import('../views/user/User')
   },
   {
     path: '/contests',
     name: 'contests',
-    component: () => import('../views/Contests')
+    component: () => import('../views/contest/Contests')
   },
   {
     path: '/gym',
     name: 'gym',
-    component: () => import('../views/Gym')
+    component: () => import('../views/gym/Gym')
   },
   {
     path: '/status',
     name: 'status',
-    component: () => import('../views/Status')
+    component: () => import('../views/status/Status')
   },
   {
     path: '/system',
     name: 'system',
-    component: () => import('../views/System')
+    component: () => import('../views/system/System')
   },
   {
     path: '/solution/:solutionId',
@@ -65,11 +65,11 @@ const routes = [
     },{
       path: 'status/:username',
       name: 'problem_my',
-      component: () => import('../views/Status')
+      component: () => import('../views/status/Status')
     },{
       path: 'status',
       name: 'problem_status',
-      component: () => import('../views/Status')
+      component: () => import('../views/status/Status')
     },]
   },
   {
@@ -91,11 +91,11 @@ const routes = [
     },{
       path: 'status',
       name: 'contest_status',
-      component: () => import('../views/Status')
+      component: () => import('../views/status/Status')
     },{
       path: 'status/:username',
       name: 'contest_my',
-      component: () => import('../views/Status')
+      component: () => import('../views/status/Status')
     },{
       path: 'standings',
       name: 'contest_standings',
@@ -107,16 +107,16 @@ const routes = [
   /// admin
   {
     path: '/admin',
-    component: () => import('../views/EmptyView'),
+    component: () => import('../views/_/EmptyView'),
     children: [
       {
         path: "",
         name: 'admin',
-        component: () => import('../views/Admin')
+        component: () => import('../views/admin/Admin')
       },
       {
         path: "problem",
-        component: () => import('../views/EmptyView'),
+        component: () => import('../views/_/EmptyView'),
         children: [
           {
             path: 'new',
@@ -142,7 +142,7 @@ const routes = [
       },
       {
         path: "contest",
-        component: () => import('../views/EmptyView'),
+        component: () => import('../views/_/EmptyView'),
         children: [
           {
             path: 'new',
@@ -173,7 +173,7 @@ const routes = [
   {
     path: '/refresh',
     name: 'refresh',
-    component: () => import('../views/Refresh')
+    component: () => import('../views/_/Refresh')
   },
   {
     path: '*',
