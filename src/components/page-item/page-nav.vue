@@ -7,7 +7,7 @@
           <a-menu-item key="problems"> <a-icon type="read" theme="filled" />题库 </a-menu-item>
           <a-menu-item key="rank"> <a-icon type="crown" theme="filled" />排名 </a-menu-item>
           <a-menu-item key="contests"> <a-icon type="flag" theme="filled" />比赛 </a-menu-item>
-          <a-menu-item key="gym"> <a-icon type="tags" theme="filled" />题集 </a-menu-item>
+          <a-menu-item key="gym" disabled> <a-icon type="tags" theme="filled" />题集 </a-menu-item>
         </a-menu>
         <div class="user-box">
           <template v-if="user">

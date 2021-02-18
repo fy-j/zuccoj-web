@@ -49,6 +49,9 @@ export default {
       let size = this.pageSize
       let problemId = this.$route.query.problemId
       let username = this.$route.query.username
+      if (this.$route.params.username !== undefined) {
+        username = this.$route.params.username
+      }
       let lang = this.$route.query.lang
       let result = this.$route.query.result
       let query = {}

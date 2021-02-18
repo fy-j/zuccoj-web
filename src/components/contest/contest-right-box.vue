@@ -25,7 +25,7 @@
       <div style="padding: 0 30px">
         <a-progress :percent="progressing" :status="(contestStatus>0)?('success'):('active')" :strokeWidth="30" :showInfo="false"/>
         <template v-if="contestStatus < 0">
-          <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime" @finish="remind('比赛已经开始啦！页面即将刷新', true)" title="距离比赛开始还有"></a-statistic-countdown>
+          <a-statistic-countdown class="contest-countdown" :value="contestInfo.beginTime" @finish="remind('比赛已经开始啦！页面即将刷新', true)" title="距离比赛开始还有"></a-statistic-countdown>
         </template>
         <template v-else-if="contestStatus > 0">
           <div style="width: 100%; text-align: center; height: 40px;line-height: 40px;font-size: 16px;color: black">比赛已结束</div>

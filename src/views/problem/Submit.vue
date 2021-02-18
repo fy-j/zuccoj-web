@@ -90,7 +90,7 @@ export default {
               let Data = data.data.data
               let solutionId = Data.solutionId;
               that.$message.success('提交成功')
-              that.$router.push({path:`/solution/${solutionId}`})
+              that.$router.replace({path:`/solution/${solutionId}`})
             } else {
               that.$message.error(data.data.msg)
               that.$store.commit('errorPage', data.data.code)
