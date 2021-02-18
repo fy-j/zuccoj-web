@@ -3,8 +3,8 @@
       <div class="page-foot-content-box">
         <div class="foot-content-box">
           <b class="foot-title">服务</b>
-          <a class="foot-item" href="#/status">评测队列</a>
-          <a class="foot-item">常见问题</a>
+          <router-link class="foot-item" :to="{path:'/status'}">评测队列</router-link>
+          <router-link class="foot-item" :to="{path:'/FAQ'}">常见问题</router-link>
           <a class="foot-item">意见反馈</a>
         </div>
 

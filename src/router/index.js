@@ -45,6 +45,11 @@ const routes = [
     component: () => import('../views/system/System')
   },
   {
+    path: '/FAQ',
+    name: 'FAQ',
+    component: () => import('../views/system/FAQ')
+  },
+  {
     path: '/solution/:solutionId',
     name: 'solution',
     component: () => import('../views/solution/Solution')
