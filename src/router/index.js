@@ -171,6 +171,27 @@ const routes = [
           }
         ]
       },
+      {
+        path: "user",
+        component: () => import('../views/_/EmptyView'),
+        children: [
+          {
+            path: 'manage',
+            name: 'admin_user_manage',
+            component: () => import('../views/admin/user/Manage')
+          },
+          {
+            path: 'password',
+            name: 'admin_user_password',
+            component: () => import('../views/admin/user/Password')
+          },
+          {
+            path: 'permission',
+            name: 'admin_user_permission',
+            component: () => import('../views/admin/user/Permission')
+          },
+        ]
+      },
     ]
   },
 

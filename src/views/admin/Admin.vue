@@ -46,15 +46,15 @@ export default {
           title: '用户设置',
           entrances: [{
             icon: 'user',
-            path: '',
+            path: 'admin_user_manage',
             name: '用户管理'
           },{
             icon: 'key',
-            path: '',
+            path: 'admin_user_password',
             name: '用户密码'
           },{
             icon: 'coffee',
-            path: '',
+            path: 'admin_user_permission',
             name: '用户权限'
           },]
         },
@@ -118,19 +118,19 @@ export default {
     getUnreadFeedbackCount() {
       let that = this
       that.$http.get(that.host + `/feedback/unread`)
-          .then(data => {
-            if (data.data.code === 200) {
-              that.badgeNumber.admin_feedback = data.data.data
-            } else {
-              that.$message.error(data.data.msg)
-              that.$store.commit('errorPage', data.data.code)
-            }
-          })
-          .catch(() => {
-            that.$message.error('系统错误')
-          })
-          .finally(() => {
-          })
+        .then(data => {
+          if (data.data.code === 200) {
+            that.badgeNumber.admin_feedback = data.data.data
+          } else {
+            that.$message.error(data.data.msg)
+            that.$store.commit('errorPage', data.data.code)
+          }
+        })
+        .catch(() => {
+          that.$message.error('系统错误')
+        })
+        .finally(() => {
+        })
     }
   },
   created() {

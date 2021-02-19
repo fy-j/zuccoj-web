@@ -2,7 +2,7 @@
   <div class="feedback">
     <a-table :columns="columns" :data-source="allData" size="middle" :pagination="false" :loading="loading" :rowClassName="getRowClassName">
       <span slot="username" slot-scope="record">
-        {{record.username}}
+        <router-link :to="{path: '/user/'+record.username}">{{record.username}}</router-link>
       </span>
       <span slot="action" slot-scope="record">
         <a-button size="small" @click="updateRead(record)"> {{record.unread? '已读' : '标为未读'}}</a-button>
