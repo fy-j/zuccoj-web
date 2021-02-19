@@ -275,6 +275,7 @@ export default {
     }
   },
   created() {
+    this.$store.commit('updateCurrentPage', 'admin')
     this.getData()
   }
 }

@@ -2,7 +2,7 @@
   <a-affix :offset-top="0">
     <div class="page-nav">
       <div class="middle-box">
-        <a-menu v-model="current_page" mode="horizontal" @click="navClick" class="nav-menu">
+        <a-menu v-model="$store.state.current_page" mode="horizontal" @click="navClick" class="nav-menu">
           <a-menu-item key="home"> <a-icon type="home" theme="filled"/>首页 </a-menu-item>
           <a-menu-item key="problems"> <a-icon type="read" theme="filled" />题库 </a-menu-item>
           <a-menu-item key="rank"> <a-icon type="crown" theme="filled" />排名 </a-menu-item>

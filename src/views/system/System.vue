@@ -13,6 +13,9 @@ export default {
   components: {
     'recent-data-chart': RecentDataChart,
     'judgehost-status': JudgehostStatus
+  },
+  created() {
+    this.$store.commit('updateCurrentPage', 'system')
   }
 }
 </script>

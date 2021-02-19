@@ -325,6 +325,7 @@ export default {
     }
   },
   created() {
+    this.$store.commit('updateCurrentPage', 'user')
     this.getAllData()
   },
   watch: {

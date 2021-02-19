@@ -37,6 +37,9 @@ export default {
     goBack() {
       this.$router.go(-1)
     }
+  },
+  created() {
+    this.$store.commit('updateCurrentPage', 'error')
   }
 }
 </script>

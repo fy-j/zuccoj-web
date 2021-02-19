@@ -135,6 +135,7 @@ export default {
   },
   created() {
     // this.$store.commit('permissionCheck', this.$store.state.PermissionLevel.ADMIN)
+    this.$store.commit('updateCurrentPage', 'admin')
     this.getUnreadFeedbackCount()
   }
 }

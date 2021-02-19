@@ -126,6 +126,7 @@ export default {
     }
   },
   created() {
+    this.$store.commit('updateCurrentPage', 'solution')
     this.getData()
   },
   watch: {

@@ -73,6 +73,9 @@ export default {
     return {
       faqData
     }
+  },
+  created() {
+    this.$store.commit('updateCurrentPage', 'FAQ')
   }
 }
 </script>
