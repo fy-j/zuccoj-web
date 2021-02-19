@@ -120,6 +120,11 @@ const routes = [
         component: () => import('../views/admin/Admin')
       },
       {
+        path: "feedback",
+        name: 'admin_feedback',
+        component: () => import('../views/admin/Feedback')
+      },
+      {
         path: "problem",
         component: () => import('../views/_/EmptyView'),
         children: [
