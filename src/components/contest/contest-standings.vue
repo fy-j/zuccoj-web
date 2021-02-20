@@ -54,7 +54,6 @@ export default {
             if (data.data.code === 200) {
               let Data = data.data.data
               that.scoreboardData = JSON.parse(Data)
-              console.log(that.scoreboardData)
             } else {
               that.$message.error(data.data.msg)
               that.$store.commit('errorPage', data.data.code)

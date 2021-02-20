@@ -1,5 +1,6 @@
 <template>
   <mavon-editor
+      :externalLink="externalLink"
       ref="md"
       v-model="content"
       :placeholder="placeholder"
@@ -18,7 +19,27 @@ export default {
   data() {
     return {
       content: this.value,
-      uploading: false
+      uploading: false,
+      externalLink: {
+        markdown_css: function() {
+          return '/markdown/github-markdown.min.css';
+        },
+        hljs_js: function() {
+          return '/highlightjs/highlight.min.js';
+        },
+        hljs_css: function(css) {
+          return '/highlightjs/styles/' + css + '.min.css';
+        },
+        hljs_lang: function(lang) {
+          return '/highlightjs/languages/' + lang + '.min.js';
+        },
+        katex_css: function() {
+          return '/katex/katex.min.css';
+        },
+        katex_js: function() {
+          return '/katex/katex.min.js';
+        },
+      }
     }
   },
   methods: {
