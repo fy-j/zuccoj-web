@@ -2,6 +2,9 @@
   <span v-if="code === -1" class="solution-style-pd">
     <a-icon type="loading" /> <b>Pending</b>
   </span>
+  <span v-else-if="code === 0">
+    <a><b class="solution-style-ue" title="结果未知">Unknown</b></a>
+  </span>
   <span v-else-if="code === 1">
     <a><b class="solution-style-ce" title="编译错误，点击可查看编译器信息">Compile Error</b></a>
   </span>

@@ -11,10 +11,10 @@
         <a-form-model-item prop="endTime" label="结束时间 ">
           <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.endTime" show-time placeholder="结束时间" :showToday="false" style="width: 100%"/>
         </a-form-model-item>
-        <a-form-model-item prop="freezeTime" label="封榜时间 ">
+        <a-form-model-item prop="freezeTime" label="封榜时间 " v-if="ContentTypeText[contestData.contestType] === 'ACM/ICPC'">
           <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.freezeTime" show-time placeholder="封榜时间" :showToday="false" style="width: 100%"/>
         </a-form-model-item>
-        <a-form-model-item prop="unfreezeTime" label="解榜时间 ">
+        <a-form-model-item prop="unfreezeTime" label="解榜时间 " v-if="ContentTypeText[contestData.contestType] === 'ACM/ICPC'">
           <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.unfreezeTime" show-time placeholder="解榜时间" :showToday="false" style="width: 100%"/>
         </a-form-model-item>
         <a-form-model-item prop="isPublic" label="公开比赛 ">
