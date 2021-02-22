@@ -7,7 +7,7 @@
           <a-alert message="进入封榜时间，选手榜单已冻结" type="warning" close-text="知道了" show-icon style="margin-bottom: 10px" v-if="scoreboardData.contestFrozen && scoreboardData.contestType === 1"/>
           <div :style="`width: ${370+65*scoreboardData.problemCount}px; background: #FFFFFF`">
             <scoreboard-for-icpc v-if="scoreboardData.contestType === 1" :scoreboard="scoreboardData"></scoreboard-for-icpc>
-            <scoreboard-for-oi v-else-if="scoreboardData.contestType === 2" :scoreboard="scoreboardData"></scoreboard-for-oi>
+            <scoreboard-for-oi v-else-if="scoreboardData.contestType === 2 || scoreboardData.contestType === 3" :scoreboard="scoreboardData"></scoreboard-for-oi>
           </div>
           <div class="scoreboard-under-text">
             <i>Scoreboard Mode: <b>{{ContentTypeText[scoreboardData.contestType]}}</b> | Last Update Time: <b>{{$moment(scoreboardData.updateTime).format("YYYY-MM-DD HH:mm:ss")}}</b></i>
