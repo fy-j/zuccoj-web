@@ -13,7 +13,7 @@
         </span>
 
         <span slot="judgeResultResult" slot-scope="record">
-          <status-solution-result :code="record.result"></status-solution-result>
+          <status-solution-result :code="record.result" :score="record.score"></status-solution-result>
         </span>
 
         <span slot="judgeResultLang" slot-scope="record">

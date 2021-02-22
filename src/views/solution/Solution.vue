@@ -17,7 +17,7 @@
             {{ solutionData.submitTime }}
           </a-descriptions-item>
           <a-descriptions-item label="评测结果">
-            <status-solution-result :code="solutionData.result"></status-solution-result>
+            <status-solution-result :code="solutionData.result" :score="solutionData.score"></status-solution-result>
           </a-descriptions-item>
           <a-descriptions-item label="代码语言">
             {{ (solutionData.lang===1)?('C'):((solutionData.lang===2)?('C++'):((solutionData.lang===3)?('Java'):('UNKNOWN')))}}
