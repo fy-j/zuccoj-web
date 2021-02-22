@@ -17,6 +17,15 @@
         <file-size :size="size"></file-size>
       </span>
 
+      <span slot="score" slot-scope="record">
+          <a-tooltip>
+            <template slot="title">
+              回车保存
+            </template>
+            <a-input-number v-model="record.score" :min="0" size="small" @pressEnter="updateScore(record)"></a-input-number>
+          </a-tooltip>
+      </span>
+
       <span slot="delete" slot-scope="record">
         <a-popconfirm title="真的要删除该测试点吗？" @confirm="delOneTestcase(record.testcaseId)">
           <a-icon slot="icon" type="question-circle-o" style="color: red" />
@@ -70,6 +79,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 const columns = [
   {
     title: '#',
@@ -105,6 +116,12 @@ const columns = [
     align: 'center'
   },
   {
+    title: '测试点分数',
+    key: 'score',
+    scopedSlots: { customRender: 'score' },
+    align: 'center'
+  },
+  {
     title: '',
     key: 'delete',
     scopedSlots: { customRender: 'delete' },
@@ -136,11 +153,14 @@ export default {
       zipUploading: false
     }
   },
+  computed: {
+    ...mapState(['host'])
+  },
   methods: {
     getData() {
       let that = this
       that.loading = true
-      that.$http.get(that.$store.state.host + '/testcase/get?problemId='+that.problemId)
+      that.$http.get(that.host + '/testcase/get?problemId='+that.problemId)
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data
@@ -192,7 +212,7 @@ export default {
       sendData.append('problemId', that.problemId)
       sendData.append('inputFile', that.inputFile)
       sendData.append('outputFile', that.outputFile)
-      that.$http.post(that.$store.state.host + '/testcase/upload', sendData)
+      that.$http.post(that.host + '/testcase/upload', sendData)
           .then(data => {
             if (data.data.code === 200) {
               that.$message.success(data.data.msg)
@@ -232,7 +252,7 @@ export default {
       let sendData = new FormData()
       sendData.append('problemId', that.problemId)
       sendData.append('zip', that.zipFile)
-      that.$http.post(that.$store.state.host + '/testcase/uploadZip', sendData)
+      that.$http.post(that.host + '/testcase/uploadZip', sendData)
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data;
@@ -273,7 +293,37 @@ export default {
 
       let sendData = new FormData()
       sendData.append('testcaseId', testcaseId)
-      that.$http.post(that.$store.state.host + '/testcase/delOne', sendData)
+      that.$http.post(that.host + '/testcase/delOne', sendData)
+          .then(data => {
+            if (data.data.code === 200) {
+              that.$message.success(data.data.msg)
+              that.getData()
+            } else {
+              that.$message.error(data.data.msg)
+              if (data.data.code === 403) {
+                that.$router.replace({
+                  name: 'error',
+                  params: {
+                    code: '403'
+                  }
+                })
+              }
+            }
+          })
+          .catch(() => {
+            that.$message.error('系统错误')
+          })
+          .finally(() => {
+            that.oneUpdating = false
+          })
+    },
+    updateScore(record) {
+      let that = this
+
+      let sendData = new FormData()
+      sendData.append('testcaseId', record.testcaseId)
+      sendData.append('score', record.score)
+      that.$http.post(that.host + '/testcase/score', sendData)
           .then(data => {
             if (data.data.code === 200) {
               that.$message.success(data.data.msg)
