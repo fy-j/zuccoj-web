@@ -14,6 +14,14 @@
         <template slot="tagSet" slot-scope="tagSet">
           <a-tag v-for="tag in tagSet" :key="tag+Math.random()">{{tag}}</a-tag>
         </template>
+        <template slot="solved" slot-scope="solved">
+          <span v-if="solved >= 0">{{solved}}</span>
+          <span v-else>/</span>
+        </template>
+        <template slot="submitted" slot-scope="submitted">
+          <span v-if="submitted >= 0">{{submitted}}</span>
+          <span v-else>/</span>
+        </template>
       </a-table>
       <div class="table-pagination-box" v-if="!isContest">
         <a-pagination :current="page" :total="count" :pageSize="pageSize" @change="pageChange"/>
@@ -52,12 +60,14 @@ const columns = [
     dataIndex: 'solved',
     key: 'solved',
     width: '70px',
+    scopedSlots: { customRender: 'solved' },
     align: 'center'
   },
   {
     title: '提交',
     dataIndex: 'submitted',
     key: 'submitted',
+    scopedSlots: { customRender: 'submitted' },
     width: '70px',
     align: 'center'
   },

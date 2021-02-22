@@ -7,13 +7,13 @@
     <router-link slot="nickname" slot-scope="record" :to="{path: `/user/${record.username}`}" class="scoreboard-username">
       {{record.nickname}}
     </router-link>
-    <scoreboard-cell-for-icpc
+    <scoreboard-cell-for-oi
         v-for="problemId in scoreboard.problemCount"
         :slot="`problem_${problemId-1}`"
         slot-scope="record"
         :record="record.problems[problemId-1]"
         :key="`problem_${problemId-1}`+Math.random()">
-    </scoreboard-cell-for-icpc>
+    </scoreboard-cell-for-oi>
   </a-table>
 </template>
 
@@ -25,7 +25,6 @@ const prefixColumns = [
     title: '#',
     dataIndex: 'rank',
     key: 'rank',
-    // fixed: 'left',
     scopedSlots: { customRender: 'rank' },
     width: '50px',
     align: 'center'
@@ -33,36 +32,25 @@ const prefixColumns = [
   {
     title: '',
     key: 'nickname',
-    // fixed: 'left',
     scopedSlots: { customRender: 'nickname' },
     width: '200px',
     align: 'center'
   },
   {
-    title: '=',
-    dataIndex: 'point',
-    key: 'point',
-    // fixed: 'left',
-    scopedSlots: { customRender: 'point' },
-    width: '50px',
-    align: 'center'
-  },
-  {
-    title: '罚时',
-    dataIndex: 'penalty',
-    key: 'penalty',
-    // fixed: 'left',
-    scopedSlots: { customRender: 'penalty' },
+    title: '总分',
+    dataIndex: 'score',
+    key: 'score',
+    scopedSlots: { customRender: 'score' },
     width: '70px',
     align: 'center'
   },
 ];
 
-import ScoreboardCellForICPC from '@/components/scoreboard/scoreboard-cell-for-icpc'
+import ScoreboardCellForOI from '@/components/scoreboard/scoreboard-cell-for-oi'
 export default {
   name: "scoreboard-for-icpc",
   components: {
-    'scoreboard-cell-for-icpc': ScoreboardCellForICPC
+    'scoreboard-cell-for-oi': ScoreboardCellForOI
   },
   props: {
     scoreboard: Object
@@ -88,17 +76,17 @@ export default {
           align: 'center',
           scopedSlots: { customRender: `problem_${index}` },
           customCell: function (record){
+            if (record.problems[index].pending) {
+              return {
+                style: {
+                  'background-color': 'rgb(253,246,236)'
+                }
+              }
+            }
             if (record.problems[index].firstBlood) {
               return {
                 style: {
                   'background-color': 'rgb(224,255,228)'
-                }
-              }
-            }
-            if (record.problems[index].rightTime === undefined && record.problems[index].pendingTryCont >0 ) {
-              return {
-                style: {
-                  'background-color': 'rgb(253,246,236)'
                 }
               }
             }
