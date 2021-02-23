@@ -137,7 +137,7 @@ export default {
         ],
         nickname: [
           {required: true, message: '请输入昵称', trigger: 'blur'},
-          {min: 6, max: 16, message: '长度在6-16之间', trigger: 'blur'},
+          {min: 2, max: 16, message: '长度在2-16之间', trigger: 'blur'},
         ],
         password: [
           {required: true, message: '请验证密码以确认身份', trigger: 'blur'},

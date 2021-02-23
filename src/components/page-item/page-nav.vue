@@ -114,7 +114,7 @@
         loginSubmitting: false,
         regModalVisible: false,
         regSubmitting: false,
-        captchaUrl: this.host+'/captcha/get?p='+new Date().getTime(),
+        captchaUrl: this.$store.state.host+'/captcha/get?p='+new Date().getTime(),
         login: {
           username: '',
           password: ''
@@ -136,7 +136,7 @@
           ],
           nickname: [
             { required: true, message: '请输入昵称', trigger: 'blur' },
-            { min: 6, max: 16, message: '长度在6-16之间', trigger: 'blur'},
+            { min: 2, max: 16, message: '长度在2-16之间', trigger: 'blur'},
           ],
           password: [
             { required: true, message: '请输入密码', trigger: 'blur' },
