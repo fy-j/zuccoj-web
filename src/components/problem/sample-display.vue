@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     copy(str) {
-      let temp = document.createElement("input");
+      let temp = document.createElement("textarea");
       temp.value = str;
       document.body.appendChild(temp);
       temp.select();
