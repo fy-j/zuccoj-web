@@ -8,7 +8,7 @@
             <b>#{{ $route.params.solutionId }}</b>
           </a-descriptions-item>
           <a-descriptions-item label="所属题目" :span="2">
-            <router-link :to="'/problem/' + solutionData.problemId">{{ solutionData.problemTitle }}</router-link>
+            <router-link :to="getProblemUrl(solutionData)">{{ solutionData.problemTitle }}</router-link>
           </a-descriptions-item>
           <a-descriptions-item label="提交用户">
             <router-link :to="'/user/'+solutionData.username">{{ solutionData.username }}</router-link>
@@ -52,6 +52,7 @@ import StatusSolutionResult from '@/components/status/status-solution-result'
 import FileSize from '@/components/number/file-size'
 import LoadingBoxFrame from '@/components/frame/loading-box-frame'
 import MarkdownDisplay from '@/components/markdown/markdown-display'
+import {mapState} from "vuex";
 
 export default {
   name: "Solution",
@@ -68,7 +69,15 @@ export default {
       solutionData: {}
     }
   },
+  computed: {
+    ...mapState(['getContestProblemLabel'])
+  },
   methods: {
+    getProblemUrl(solution) {
+      if (solution.contestId === 0) return '/problem/' + solution.problemId
+      return '/contest/' + solution.contestId + '/problem/' +
+          this.getContestProblemLabel(solution.problemId, 1, solution.problemId)
+    },
     nameInMd(code) {
       switch (code) {
         case 1:
