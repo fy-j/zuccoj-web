@@ -1,11 +1,20 @@
 <template>
-<!--  <a-table :columns="dynamicColumns" :data-source="scoreboard.scoreboard" size="middle" bordered :scroll="{x:((scoreboard.problemCount<=7)?false:(320+65*scoreboard.problemCount))}" :pagination="false">-->
+  <!--  <a-table :columns="dynamicColumns" :data-source="scoreboard.scoreboard" size="middle" bordered :scroll="{x:((scoreboard.problemCount<=7)?false:(320+65*scoreboard.problemCount))}" :pagination="false">-->
   <a-table :columns="dynamicColumns" :data-source="scoreboard.scoreboard" size="middle" bordered :pagination="false">
     <span slot="rank" slot-scope="rank">
-      <b>{{rank}}</b>
+      <b>{{ rank }}</b>
     </span>
-    <router-link slot="nickname" slot-scope="record" :to="{path: `/user/${record.username}`}" class="scoreboard-username">
-      {{record.nickname}}
+    <router-link slot="nickname" slot-scope="record" :to="{path: `/user/${record.username}`}"
+                 class="scoreboard-username">
+      {{ record.nickname }}
+    </router-link>
+    <router-link
+        v-for="problemId in scoreboard.problemCount"
+        :slot="`title_${problemId-1}`"
+        :key="`title_${problemId-1}`+Math.random()"
+        class="scoreboard-label"
+        :to="'problem/' + getContestProblemLabel(problemId - 1,true,scoreboard.problemCount)">
+      {{ getContestProblemLabel(problemId - 1, true, scoreboard.problemCount) }}
     </router-link>
     <scoreboard-cell-for-oi
         v-for="problemId in scoreboard.problemCount"
@@ -25,14 +34,14 @@ const prefixColumns = [
     title: '#',
     dataIndex: 'rank',
     key: 'rank',
-    scopedSlots: { customRender: 'rank' },
+    scopedSlots: {customRender: 'rank'},
     width: '50px',
     align: 'center'
   },
   {
     title: '',
     key: 'nickname',
-    scopedSlots: { customRender: 'nickname' },
+    scopedSlots: {customRender: 'nickname'},
     width: '200px',
     align: 'center'
   },
@@ -40,13 +49,14 @@ const prefixColumns = [
     title: '总分',
     dataIndex: 'score',
     key: 'score',
-    scopedSlots: { customRender: 'score' },
+    scopedSlots: {customRender: 'score'},
     width: '70px',
     align: 'center'
   },
 ];
 
 import ScoreboardCellForOI from '@/components/scoreboard/scoreboard-cell-for-oi'
+
 export default {
   name: "scoreboard-for-icpc",
   components: {
@@ -56,7 +66,7 @@ export default {
     scoreboard: Object
   },
   data() {
-    return{
+    return {
       prefixColumns,
       dynamicColumns: []
     }
@@ -70,12 +80,12 @@ export default {
       let cnt = this.scoreboard.problemCount
       for (let index = 0; index < cnt; index++) {
         this.dynamicColumns.push({
-          title: this.getContestProblemLabel(index, true, cnt),
           key: `problem_${index}`,
           width: '65px',
           align: 'center',
-          scopedSlots: { customRender: `problem_${index}` },
-          customCell: function (record){
+          slots: {title: `title_${index}`},
+          scopedSlots: {customRender: `problem_${index}`},
+          customCell: function (record) {
             if (record.problems[index].pending) {
               return {
                 style: {
@@ -108,7 +118,16 @@ export default {
 .scoreboard-username {
   color: black;
 }
+
 .scoreboard-username:hover {
+  color: #1890ff;
+}
+
+.scoreboard-label {
+  color: black;
+}
+
+.scoreboard-label:hover {
   color: #1890ff;
 }
 </style>
