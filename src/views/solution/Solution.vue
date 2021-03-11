@@ -8,10 +8,10 @@
             <b>#{{ $route.params.solutionId }}</b>
           </a-descriptions-item>
           <a-descriptions-item label="所属题目" :span="2">
-            <b>{{ solutionData.problemTitle }}</b>
+            <router-link :to="'/problem/' + solutionData.problemId">{{ solutionData.problemTitle }}</router-link>
           </a-descriptions-item>
           <a-descriptions-item label="提交用户">
-            {{ solutionData.username }}
+            <router-link :to="'/user/'+solutionData.username">{{ solutionData.username }}</router-link>
           </a-descriptions-item>
           <a-descriptions-item label="提交时间" :span="2">
             {{ solutionData.submitTime }}
@@ -20,7 +20,9 @@
             <status-solution-result :code="solutionData.result" :score="solutionData.score"></status-solution-result>
           </a-descriptions-item>
           <a-descriptions-item label="代码语言">
-            {{ (solutionData.lang===1)?('C'):((solutionData.lang===2)?('C++'):((solutionData.lang===3)?('Java'):('UNKNOWN')))}}
+            {{
+              (solutionData.lang === 1) ? ('C') : ((solutionData.lang === 2) ? ('C++') : ((solutionData.lang === 3) ? ('Java') : ('UNKNOWN')))
+            }}
           </a-descriptions-item>
           <a-descriptions-item label="代码长度">
             <file-size :size="solutionData.codeLength" unit="B" :fixx="0"></file-size>
@@ -36,8 +38,10 @@
           </a-descriptions-item>
         </a-descriptions>
       </div>
-      <markdown-display v-if="solutionData.code" :content="`**用户代码**\n\`\`\`${nameInMd(solutionData.lang)}\n${solutionData.code}\n\`\`\``"></markdown-display>
-      <markdown-display v-if="solutionData.remark" :content="`**编译信息**\n\`\`\`\n${solutionData.remark}\n\`\`\``"></markdown-display>
+      <markdown-display v-if="solutionData.code"
+                        :content="`**用户代码**\n\`\`\`${nameInMd(solutionData.lang)}\n${solutionData.code}\n\`\`\``"></markdown-display>
+      <markdown-display v-if="solutionData.remark"
+                        :content="`**编译信息**\n\`\`\`\n${solutionData.remark}\n\`\`\``"></markdown-display>
     </template>
   </base-box-frame>
 </template>
@@ -48,6 +52,7 @@ import StatusSolutionResult from '@/components/status/status-solution-result'
 import FileSize from '@/components/number/file-size'
 import LoadingBoxFrame from '@/components/frame/loading-box-frame'
 import MarkdownDisplay from '@/components/markdown/markdown-display'
+
 export default {
   name: "Solution",
   components: {
@@ -66,10 +71,14 @@ export default {
   methods: {
     nameInMd(code) {
       switch (code) {
-        case 1: return 'c'
-        case 2: return 'cpp'
-        case 3: return 'java'
-        default: return ''
+        case 1:
+          return 'c'
+        case 2:
+          return 'cpp'
+        case 3:
+          return 'java'
+        default:
+          return ''
       }
     },
     getData() {
