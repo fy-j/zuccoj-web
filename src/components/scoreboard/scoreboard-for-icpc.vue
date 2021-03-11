@@ -16,13 +16,15 @@
         :to="'problem/' + getContestProblemLabel(problemId - 1,true,scoreboard.problemCount)">
       {{ getContestProblemLabel(problemId - 1, true, scoreboard.problemCount) }}
     </router-link>
-    <scoreboard-cell-for-icpc
-        v-for="problemId in scoreboard.problemCount"
-        :slot="`problem_${problemId-1}`"
-        slot-scope="record"
-        :record="record.problems[problemId-1]"
-        :key="`problem_${problemId-1}`+Math.random()">
-    </scoreboard-cell-for-icpc>
+    <template
+        v-for="problemId in scoreboard.problemCount">
+      <scoreboard-cell-for-icpc
+          :slot="`problem_${problemId-1}`"
+          slot-scope="record"
+          :record="record.problems[problemId-1]"
+          :key="`problem_${problemId-1}`+Math.random()">
+      </scoreboard-cell-for-icpc>
+    </template>
   </a-table>
 </template>
 

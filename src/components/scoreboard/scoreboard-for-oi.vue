@@ -16,13 +16,14 @@
         :to="'problem/' + getContestProblemLabel(problemId - 1,true,scoreboard.problemCount)">
       {{ getContestProblemLabel(problemId - 1, true, scoreboard.problemCount) }}
     </router-link>
-    <scoreboard-cell-for-oi
-        v-for="problemId in scoreboard.problemCount"
-        :slot="`problem_${problemId-1}`"
-        slot-scope="record"
-        :record="record.problems[problemId-1]"
-        :key="`problem_${problemId-1}`+Math.random()">
-    </scoreboard-cell-for-oi>
+    <template v-for="problemId in scoreboard.problemCount">
+      <scoreboard-cell-for-oi
+          :slot="`problem_${problemId-1}`"
+          slot-scope="record"
+          :record="record.problems[problemId-1]"
+          :key="`problem_${problemId-1}`+Math.random()">
+      </scoreboard-cell-for-oi>
+    </template>
   </a-table>
 </template>
 
