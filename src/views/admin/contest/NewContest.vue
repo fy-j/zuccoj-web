@@ -1,21 +1,35 @@
 <template>
   <title-box-frame title="新建比赛">
     <template v-slot:content>
-      <a-form-model :rules="contestRules" :model="contestData" ref="contestForm" :label-col="{span:2}" :wrapper-col="{span:22}">
+      <a-form-model :rules="contestRules" :model="contestData" ref="contestForm" :label-col="{span:2}"
+                    :wrapper-col="{span:22}">
         <a-form-model-item prop="contestName" label="比赛名称 ">
           <a-input v-model="contestData.contestName" placeholder="比赛名称"></a-input>
         </a-form-model-item>
         <a-form-model-item prop="beginTime" label="开始时间 ">
-          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.beginTime" show-time placeholder="开始时间" :showToday="false" style="width: 100%"/>
+          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.beginTime"
+                         :show-time="{defaultOpenValue: $moment().startOf('hour')}"
+                         placeholder="开始时间"
+                         :showToday="false" style="width: 100%"/>
         </a-form-model-item>
         <a-form-model-item prop="endTime" label="结束时间 ">
-          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.endTime" show-time placeholder="结束时间" :showToday="false" style="width: 100%"/>
+          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.endTime"
+                         :show-time="{defaultOpenValue: $moment().startOf('hour')}"
+                         placeholder="结束时间"
+                         :showToday="false" style="width: 100%"/>
         </a-form-model-item>
-        <a-form-model-item prop="freezeTime" label="封榜时间 " v-if="ContentTypeText[contestData.contestType] === 'ACM/ICPC'">
-          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.freezeTime" show-time placeholder="封榜时间" :showToday="false" style="width: 100%"/>
+        <a-form-model-item prop="freezeTime" label="封榜时间 "
+                           v-if="ContentTypeText[contestData.contestType] === 'ACM/ICPC'">
+          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.freezeTime"
+                         :show-time="{defaultOpenValue: $moment().startOf('hour')}"
+                         placeholder="封榜时间"
+                         :showToday="false" style="width: 100%"/>
         </a-form-model-item>
-        <a-form-model-item prop="unfreezeTime" label="解榜时间 " v-if="ContentTypeText[contestData.contestType] === 'ACM/ICPC'">
-          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.unfreezeTime" show-time placeholder="解榜时间" :showToday="false" style="width: 100%"/>
+        <a-form-model-item prop="unfreezeTime" label="解榜时间 "
+                           v-if="ContentTypeText[contestData.contestType] === 'ACM/ICPC'">
+          <a-date-picker valueFormat="YYYY-MM-DD HH:mm:ss" v-model="contestData.unfreezeTime"
+                         :show-time="{defaultOpenValue: $moment().startOf('hour')}"
+                         placeholder="解榜时间" :showToday="false" style="width: 100%"/>
         </a-form-model-item>
         <a-form-model-item prop="isPublic" label="公开比赛 ">
           <a-switch v-model="contestData.isPublic"></a-switch>
@@ -42,17 +56,19 @@
                   </span>
                   <span class="contest-problem-list-item-id">
                     <span>题目编号：</span>
-                    <a-input v-model="problem.problemId" placeholder="题目编号" type="number" style="width: 200px" @change="getProblemTitle(index)"></a-input>
+                    <a-input v-model="problem.problemId" placeholder="题目编号" type="number" style="width: 200px"
+                             @change="getProblemTitle(index)"></a-input>
                   </span>
                   <span class="contest-problem-list-item-title">
                     <span>题目标题：</span>
                     <a-input v-model="problem.problemTitle" placeholder="题目标题" style="width: 500px" readOnly></a-input>
                   </span>
                   <span class="contest-problem-list-item-move" v-if="problemMovable">
-                    <a-icon type="menu" />
+                    <a-icon type="menu"/>
                   </span>
-                  <span title="删除" class="contest-problem-list-item-delete" v-else @click="contestData.problems.splice(index, 1)">
-                    <a-icon type="delete" />
+                  <span title="删除" class="contest-problem-list-item-delete" v-else
+                        @click="contestData.problems.splice(index, 1)">
+                    <a-icon type="delete"/>
                   </span>
                 </div>
               </template>
@@ -73,9 +89,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {mapState} from 'vuex'
 import TitleBoxFrame from '@/components/frame/title-box-frame'
 import draggable from 'vuedraggable'
+
 export default {
   name: "NewContest",
   components: {
@@ -99,24 +116,24 @@ export default {
       },
       contestRules: {
         contestName: [
-          { required: true, message: '请输入比赛名称', trigger: 'blur' },
+          {required: true, message: '请输入比赛名称', trigger: 'blur'},
         ],
         beginTime: [
-          { required: true, message: '请输入比赛开始时间', trigger: 'blur' },
-          { validator: this.contestBeginTimeCheck, trigger: 'change' }
+          {required: true, message: '请输入比赛开始时间', trigger: 'blur'},
+          {validator: this.contestBeginTimeCheck, trigger: 'change'}
         ],
         endTime: [
-          { required: true, message: '请输入比赛结束时间', trigger: 'blur' },
-          { validator: this.contestEndTimeCheck, trigger: 'change' }
+          {required: true, message: '请输入比赛结束时间', trigger: 'blur'},
+          {validator: this.contestEndTimeCheck, trigger: 'change'}
         ],
         isPublic: [
-          { required: true, message: '请设置是否公开比赛', trigger: 'blur' },
+          {required: true, message: '请设置是否公开比赛', trigger: 'blur'},
         ],
         contestType: [
-          { required: true, message: '请设置比赛模式', trigger: 'blur' },
+          {required: true, message: '请设置比赛模式', trigger: 'blur'},
         ],
         problems: [
-          { validator: this.problemListCheck, trigger: 'change' }
+          {validator: this.problemListCheck, trigger: 'change'}
         ]
       },
       submitting: false,
@@ -124,9 +141,9 @@ export default {
   },
   computed: {
     ...mapState([
-        'host',
-        'ContentTypeText',
-        'getContestProblemLabel'
+      'host',
+      'ContentTypeText',
+      'getContestProblemLabel'
     ])
   },
   methods: {
@@ -210,7 +227,7 @@ export default {
       }
       sendData.append('contestType', that.contestData.contestType)
       let problemList = []
-      that.contestData.problems.forEach( o => problemList.push(o.problemId))
+      that.contestData.problems.forEach(o => problemList.push(o.problemId))
       sendData.append('problems', JSON.stringify(problemList))
       that.submitting = true
       that.$http.post(that.host + '/contest/new', sendData)
@@ -244,17 +261,19 @@ export default {
 </script>
 
 <style scoped>
-  .contest-problem-list-item{
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-around;
-  }
-  .contest-problem-list-item-delete{
-    cursor: pointer;
-    color: red;
-  }
-  .contest-problem-list-item-move{
-    cursor: move;
-    color: black;
-  }
+.contest-problem-list-item {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.contest-problem-list-item-delete {
+  cursor: pointer;
+  color: red;
+}
+
+.contest-problem-list-item-move {
+  cursor: move;
+  color: black;
+}
 </style>
