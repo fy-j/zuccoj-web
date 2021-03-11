@@ -38,10 +38,23 @@
           </a-descriptions-item>
         </a-descriptions>
       </div>
+      <template v-if="solutionData.code">
+        <div class="fake-markdown-wrapper markdown-body">
+          <h3> 用户代码
+            <button :disabled="copied" class="copy-btn" @click="copyCode">
+              {{ copied ? '复制成功' : '复制' }}
+            </button>
+          </h3>
+        </div>
+      </template>
       <markdown-display v-if="solutionData.code"
-                        :content="`**用户代码**\n\`\`\`${nameInMd(solutionData.lang)}\n${solutionData.code}\n\`\`\``"></markdown-display>
-      <markdown-display v-if="solutionData.remark"
-                        :content="`**编译信息**\n\`\`\`\n${solutionData.remark}\n\`\`\``"></markdown-display>
+                        :content="`\`\`\`${nameInMd(solutionData.lang)}\n${solutionData.code}\n\`\`\``"></markdown-display>
+      <template v-if="solutionData.remark">
+        <div class="fake-markdown-wrapper markdown-body">
+          <h3>编译信息</h3>
+        </div>
+        <markdown-display :content="`\`\`\`\n${solutionData.remark}\n\`\`\``"></markdown-display>
+      </template>
     </template>
   </base-box-frame>
 </template>
@@ -66,13 +79,27 @@ export default {
   data() {
     return {
       loading: false,
-      solutionData: {}
+      solutionData: {},
+      copied: false,
     }
   },
   computed: {
     ...mapState(['getContestProblemLabel'])
   },
   methods: {
+    copyCode() {
+      console.log(this.solutionData.code)
+      let temp = document.createElement("textarea");
+      temp.value = this.solutionData.code;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("Copy");
+      document.body.removeChild(temp);
+      this.copied = true
+      setTimeout(() => {
+        this.copied = false
+      }, 1000)
+    },
     getProblemUrl(solution) {
       if (solution.contestId === 0) return '/problem/' + solution.problemId
       return '/contest/' + solution.contestId + '/problem/' +
@@ -156,5 +183,27 @@ export default {
 </script>
 
 <style scoped>
+.fake-markdown-wrapper {
+  padding: 8px 25px 15px 25px;
+}
 
+.copy-btn {
+  float: right;
+  color: #1890ff;
+  background-color: transparent;
+  padding: 5px 10px;
+  font-size: .7em;
+  border-radius: 3px;
+  border: 1px #1890ff solid;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background-color: #1890ff30;
+}
+
+.copy-btn:disabled {
+  background: #1890ff;
+  color: white;
+}
 </style>
