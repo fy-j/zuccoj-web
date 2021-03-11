@@ -35,11 +35,11 @@ export default new Vuex.Store({
     file_host: file_host,
     current_page: [],
     user: null,
-    getContestProblemLabel: function(id, a, sum) {
-      if (!a) {
+    getContestProblemLabel: function(id, is_contest, problem_cnt) {
+      if (!is_contest) {
         return id
       }
-      if (sum > ContestProblemLabel.length) {
+      if (problem_cnt > ContestProblemLabel.length) {
         return id
       }
       return ContestProblemLabel[id]
