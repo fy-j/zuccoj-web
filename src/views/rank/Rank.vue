@@ -9,7 +9,7 @@
           <a :href="'#/user/'+user.username">{{nickname}}</a>
         </span>
         <span slot="percent" slot-scope="percent">
-          {{ percent.submitted ? ((percent.solved/percent.submitted)*100).toFixed(0) : 0}}%
+          {{ percent.submitted ? ((percent.accepted/percent.submitted)*100).toFixed(0) : 0}}%
         </span>
       </a-table>
       <div class="table-pagination-box">
@@ -47,9 +47,16 @@ const columns = [
     align: 'center'
   },
   {
-    title: '通过',
+    title: '题数',
     dataIndex: 'solved',
     key: 'solved',
+    width: '70px',
+    align: 'center'
+  },
+  {
+    title: '通过',
+    dataIndex: 'accepted',
+    key: 'accepted',
     width: '70px',
     align: 'center'
   },
