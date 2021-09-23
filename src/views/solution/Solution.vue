@@ -88,7 +88,6 @@ export default {
   },
   methods: {
     copyCode() {
-      console.log(this.solutionData.code)
       let temp = document.createElement("textarea");
       temp.value = this.solutionData.code;
       document.body.appendChild(temp);
