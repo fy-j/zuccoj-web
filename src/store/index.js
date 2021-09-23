@@ -4,8 +4,8 @@ import router from '../router'
 
 Vue.use(Vuex)
 
-const host = 'http://localhost:8080'
-const file_host = 'http://localhost:8080'
+const host = 'https://zuccoj-api.zuccacm.top'
+const file_host = 'https://zuccoj-api.zuccacm.top'
 
 const PermissionLevel = {
   ANYONE: -999,
