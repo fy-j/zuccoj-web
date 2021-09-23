@@ -19,7 +19,7 @@
           <b class="foot-title">关于</b>
           <span class="foot-item" :title="'build '+buildVersion">ZUCC Online Judge &beta;</span>
           <span class="foot-item">&copy; {{ new Date().getFullYear() }} ZUCC ACM LAB</span>
-          <span class="foot-item">Powered by <a href="https://github.com/KeadinZhou" target="_blank">@KeadinZhou</a></span>
+          <span class="foot-item">Powered by <a href="https://github.com/KeadinZhou" target="_blank">@KeadinZhou</a> & <a href="https://github.com/zucc-acm-devteam" target="_blank">Dev Team</a></span>
           <span class="foot-item">ICP备案号： <a href="https://beian.miit.gov.cn" target="_blank">浙ICP备2021027826号-1</a></span>
         </div>
       </div>
