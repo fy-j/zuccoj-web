@@ -6,7 +6,7 @@
     </span>
     <router-link slot="nickname" slot-scope="record" :to="{path: `/user/${record.username}`}"
                  class="scoreboard-username">
-      {{ record.nickname }}
+      {{ record.nickname }}({{ record.username }})
     </router-link>
     <router-link
         v-for="problemId in scoreboard.problemCount"
