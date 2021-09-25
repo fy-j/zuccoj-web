@@ -3,11 +3,12 @@
     <loading-box-frame v-if="loading"></loading-box-frame>
     <template v-else>
       <div class="contest-title">
-        {{contestInfo.contestName}} <span style="cursor: pointer" @click="()=>{rightBoxShow=!rightBoxShow}"><a-icon :type="rightBoxShow?'arrows-alt':'shrink'" /></span>
+        {{ contestInfo.contestName }} <span style="cursor: pointer" @click="()=>{rightBoxShow=!rightBoxShow}"><a-icon
+          :type="rightBoxShow?'arrows-alt':'shrink'"/></span>
       </div>
       <a-row :gutter="16">
         <a-col class="gutter-row" :span="rightBoxShow?18:24">
-          <router-view />
+          <router-view/>
         </a-col>
         <a-col class="gutter-row" :span="6" v-if="rightBoxShow">
           <contest-right-box :contest-info="contestInfo"></contest-right-box>
@@ -43,8 +44,14 @@
 import ContestRightBox from '@/components/contest/contest-right-box'
 import {mapState} from "vuex";
 import LoadingBoxFrame from '@/components/frame/loading-box-frame'
+
 export default {
   name: "Contest",
+  provide() {
+    return {
+      getContestInfo: () => this.contestInfo
+    }
+  },
   components: {
     'contest-right-box': ContestRightBox,
     'loading-box-frame': LoadingBoxFrame
@@ -63,7 +70,7 @@ export default {
     ...mapState(['host', 'buildGetQuery'])
   },
   methods: {
-    getContestInfo() {
+    getData() {
       let that = this
       let contestId = that.$route.params.contestId
       that.loading = true
@@ -105,7 +112,7 @@ export default {
           .then(data => {
             if (data.data.code === 200) {
               that.$message.success(data.data.msg)
-              that.$router.replace({name:'refresh'})
+              that.$router.replace({name: 'refresh'})
             } else {
               that.$message.error(data.data.msg)
               that.$store.commit('errorPage', data.data.code)
@@ -121,17 +128,22 @@ export default {
   },
   created() {
     this.$store.commit('updateCurrentPage', 'contests')
-    this.getContestInfo()
+    this.getData()
+  },
+  watch: {
+    '$route': function () {
+      this.getData()
+    }
   }
 }
 </script>
 
 <style scoped>
-  .contest-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: black;
-    margin: 20px 0;
-    font-family: "Microsoft YaHei", "微软雅黑",serif;
-  }
+.contest-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: black;
+  margin: 20px 0;
+  font-family: "Microsoft YaHei", "微软雅黑", serif;
+}
 </style>
