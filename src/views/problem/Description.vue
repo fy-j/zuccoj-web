@@ -37,7 +37,7 @@ export default {
       let that = this
       let problemId = that.$route.params.problemId
       let contestId = that.$route.params.contestId
-      if (!problemId) {
+      if (!problemId && problemId !== 0) {
         that.$store.commit('errorPage', 404)
         return
       }
