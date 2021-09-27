@@ -2,7 +2,7 @@
   <div>
     <a-row :gutter="16">
       <a-col class="gutter-row" :span="18">
-        <router-view />
+        <router-view/>
       </a-col>
       <a-col class="gutter-row" :span="6">
         <a-spin :spinning="loading">
@@ -15,12 +15,13 @@
 
 <script>
 import Problem from '@/components/problem/problem-right-box'
+
 export default {
   name: "Problem",
   components: {
     'problem-right-box': Problem
   },
-  data () {
+  data() {
     return {
       loading: true,
       problemInfo: {}
@@ -35,7 +36,7 @@ export default {
         return
       }
       that.loading = true
-      that.$http.get(that.$store.state.host + '/problem/info?problemId='+problemId)
+      that.$http.get(that.$store.state.host + '/problem/info?problemId=' + problemId)
           .then(data => {
             if (data.data.code === 200) {
               let Data = data.data.data
@@ -56,6 +57,11 @@ export default {
   },
   created() {
     this.getData()
+  },
+  watch: {
+    '$route': function () {
+      this.getData()
+    }
   }
 }
 </script>
