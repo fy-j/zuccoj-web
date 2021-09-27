@@ -63,9 +63,11 @@ const routes = [
       redirect: 'description'
     },{
       path: 'description',
+      name: 'problem_display',
       component: () => import('../views/problem/Description')
     },{
       path: 'submit',
+      name: 'problem_submit',
       component: () => import('../views/problem/Submit')
     },{
       path: 'status/:username',

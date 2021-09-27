@@ -2,39 +2,55 @@
   <base-box-frame>
     <template v-slot:content>
       <div style="margin-top: 10px">
-        <template v-if="$route.params.problemId !== undefined">
-            <div class="contest-right-button problem-submit-button" style="margin-top: 20px" @click="() => {$router.push({path:`/contest/${$route.params.contestId}/submit/${$route.params.problemId}`})}">
-              <a-icon type="upload" /> <span style="margin-left: 10px">提交代码</span>
-            </div>
-          <a-divider />
+        <template>
+          <template v-if="$route.params.problemId !== undefined">
+            <route-button icon="upload" active-color="rgb(82, 196, 26)"
+                          :route="`/contest/${$route.params.contestId}/submit/${$route.params.problemId}`"
+            >提交代码
+            </route-button>
+            <route-button icon="profile" active-color="rgb(82, 196, 26)"
+                          :route="{name: 'contest_problem_display', params:{contestId: contestInfo.contestId, problemId: $route.params.problemId}}"
+            >题目描述
+            </route-button>
+            <a-divider/>
+          </template>
+          <route-button icon="unordered-list"
+                        :route="{name: 'contest_problems', params: {contestId: contestInfo.contestId}}"
+          >题目列表
+          </route-button>
+          <route-button icon="area-chart"
+                        :route="{name: 'contest_standings', params: {contestId: contestInfo.contestId}}"
+          >比赛榜单
+          </route-button>
+          <route-button v-if="user" icon="upload"
+                        :route="{name: 'contest_my', params: {contestId: contestInfo.contestId, username: user.username}}"
+          >我的提交
+          </route-button>
+          <route-button v-if="user && (user.status >= PermissionLevel.ADMIN || $moment() >= contestInfo.endTime)"
+                        icon="code" :route="{name: 'contest_status', params: {contestId: contestInfo.contestId}}"
+          >评测记录
+          </route-button>
         </template>
-        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_problems', params: {contestId: contestInfo.contestId}})}">
-          <a-icon type="unordered-list" /> <span style="margin-left: 10px">题目列表</span>
-        </div>
-        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_standings', params: {contestId: contestInfo.contestId}})}">
-          <a-icon type="area-chart" /> <span style="margin-left: 10px">比赛榜单</span>
-        </div>
-        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_my', params: {contestId: contestInfo.contestId, username: user.username}})}" v-if="user">
-          <a-icon type="upload" /> <span style="margin-left: 10px">我的提交</span>
-        </div>
-        <div class="contest-right-button" @click="() => {$router.push({name: 'contest_status', params: {contestId: contestInfo.contestId}})}" v-if="user && (user.status >= PermissionLevel.ADMIN || $moment() >= contestInfo.endTime)">
-          <a-icon type="code" /> <span style="margin-left: 10px">评测记录</span>
-        </div>
       </div>
-      <a-divider />
+      <a-divider/>
       <div style="padding: 0 30px">
-        <a-progress :percent="progressing" :status="(contestStatus>0)?('success'):('active')" :strokeWidth="30" :showInfo="false"/>
+        <a-progress :percent="progressing" :status="(contestStatus>0)?('success'):('active')" :strokeWidth="30"
+                    :showInfo="false"/>
         <template v-if="contestStatus < 0">
-          <a-statistic-countdown class="contest-countdown" :value="contestInfo.beginTime" @finish="remind('比赛已经开始啦！页面即将刷新', true)" title="距离比赛开始还有"></a-statistic-countdown>
+          <a-statistic-countdown class="contest-countdown" :value="contestInfo.beginTime"
+                                 @finish="remind('比赛已经开始啦！页面即将刷新', true)" title="距离比赛开始还有"></a-statistic-countdown>
         </template>
         <template v-else-if="contestStatus > 0">
-          <div style="width: 100%; text-align: center; height: 40px;line-height: 40px;font-size: 16px;color: black">比赛已结束</div>
+          <div style="width: 100%; text-align: center; height: 40px;line-height: 40px;font-size: 16px;color: black">
+            比赛已结束
+          </div>
         </template>
         <template v-else>
-          <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime" @finish="remind('比赛已经结束啦！页面即将刷新', true)" title="距离比赛结束还有"></a-statistic-countdown>
+          <a-statistic-countdown class="contest-countdown" :value="contestInfo.endTime"
+                                 @finish="remind('比赛已经结束啦！页面即将刷新', true)" title="距离比赛结束还有"></a-statistic-countdown>
         </template>
       </div>
-      <a-divider />
+      <a-divider/>
       <div style="margin-bottom: 24px">
         <div class="description-item-box">
           <span class="description-item-title">比赛编号</span>
@@ -43,9 +59,9 @@
         <div class="description-item-box">
           <span class="description-item-title">比赛状态</span>
           <span class="description-item-content">
-            <span v-if="contestInfo.beginTime > $moment()"><a-badge status="success" />未开始</span>
-            <span v-else-if="contestInfo.endTime < $moment()"><a-badge status="default" />已结束</span>
-            <span v-else><a-badge status="processing" />进行中</span>
+            <span v-if="contestInfo.beginTime > $moment()"><a-badge status="success"/>未开始</span>
+            <span v-else-if="contestInfo.endTime < $moment()"><a-badge status="default"/>已结束</span>
+            <span v-else><a-badge status="processing"/>进行中</span>
           </span>
         </div>
         <div class="description-item-box">
@@ -76,9 +92,12 @@
 <script>
 import BaseBoxFrame from '@/components/frame/base-box-frame'
 import {mapState} from "vuex";
+import RouteButton from "@/components/lib/route-button";
+
 export default {
   name: "contest-right-box",
   components: {
+    RouteButton,
     'base-box-frame': BaseBoxFrame
   },
   props: {
@@ -110,17 +129,17 @@ export default {
         let now = that.nowTime.unix()
         let begin = that.contestInfo.beginTime.unix()
         let end = that.contestInfo.endTime.unix()
-        that.progressing =  (now - begin) / (end - begin) * 100;
+        that.progressing = (now - begin) / (end - begin) * 100;
       }
-      setTimeout(()=>{
+      setTimeout(() => {
         that.progressClock()
       }, 1000)
     },
-    remind(msg ,re) {
+    remind(msg, re) {
       this.$notification.open({
         message: '提醒',
         description: msg,
-        icon: <a-icon type="smile" style="color: #108ee9" />,
+        icon: <a-icon type="smile" style="color: #108ee9"/>,
       })
       if (re) {
         this.$router.push({name: 'refresh'})
@@ -134,42 +153,26 @@ export default {
 </script>
 
 <style scoped>
- .description-item-box{
-   width: 100%;
-   display: flex;
-   height: 32px;
-   line-height: 32px;
- }
- .description-item-title{
-   color: rgb(100,100,100);
-   width: 100px;
-   margin-right: 20px;
-   text-align: right;
- }
- .description-item-content{
-   color: black;
- }
- .contest-countdown{
-   margin-top: 10px;
-   text-align: center;
- }
- .contest-right-button{
-   width: 100%;
-   height: 42px;
-   line-height: 42px;
-   font-size: 14px;
-   padding: 0 40px;
-   color: black;
-   transition: 0.5s;
- }
- .contest-right-button:hover{
-   background: rgb(244,244,244);
-   cursor: pointer;
-   box-shadow: inset 30px 0 0 -20px rgb(24,144,255);
- }
- .problem-submit-button:hover{
-   background: rgb(244,244,244);
-   cursor: pointer;
-   box-shadow: inset 30px 0 0 -20px rgb(82, 196, 26);
- }
+.description-item-box {
+  width: 100%;
+  display: flex;
+  height: 32px;
+  line-height: 32px;
+}
+
+.description-item-title {
+  color: rgb(100, 100, 100);
+  width: 100px;
+  margin-right: 20px;
+  text-align: right;
+}
+
+.description-item-content {
+  color: black;
+}
+
+.contest-countdown {
+  margin-top: 10px;
+  text-align: center;
+}
 </style>
