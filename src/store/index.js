@@ -4,8 +4,8 @@ import router from '../router'
 
 Vue.use(Vuex)
 
-const host = 'https://zuccoj-api.zuccacm.top'
-const file_host = 'https://zuccoj-api.zuccacm.top'
+const host = 'https://api.zuccacm.top/zuccoj'
+const file_host = 'https://api.zuccacm.top/zuccoj'
 
 const PermissionLevel = {
   ANYONE: -999,
